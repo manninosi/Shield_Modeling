@@ -1,0 +1,79 @@
+Isotropic 14MeV neutron point source with poly, B poly, and concrete
+c
+c *********File Description************
+c
+c Description: Neutrons from a point source will trave through three materials; 
+c              poly, borated poly, and concrete
+c
+c Author: Scott Zimny
+c         Mitch Mannino
+c
+c Modifcations: 11/10/2017 - Started with the point cource and three materials.
+c               11/13/2017 - Nik E gave some pointers on F5, RPP, Mode N, 2 void cells
+c                            and NOTRN.
+c               11/27/2017 - Met with both Dr. Palmers to gain more insight on macro
+c                            bodies, NOTRN, outside void, and particle mode. Added things.
+c                1/26/2018 - Met with Mitch and Dr. Reese to discuss further steps.
+c                1/28/2018 - Working on F2, e0, DM, etc.
+c                1/29/2018 - Added surface tallies to macrobodies, added PHYS (which slightly changed results). 
+c                1/30/2018 - Added poly and lead cell, surface, and mat cards 
+c                2/12/2018 - Dose card was put in a few days ago, doing geometry today.
+c                6/21/2018 - Made concrete and poly boxes one macro body instead of sections3
+c Cell Cards  
+c mat#   density    srfce rlatns   importance
+1   1  -0.001205      -1 2 3 4 13  imp:n=1  $air
+2   1  -0.001205      -2  13   imp:n=1  $air
+30  2  -1.600000      -3  2    imp:n=1  $borated poly
+40  3  -2.300000      -4  3    imp:n=1  $Concrete blocks
+50  3  -2.300000   -13    imp:n=1  $concrete floor
+14  0               1     imp:n=0  $outside void
+
+c Surface cards
+1 RPP -600 600 -305 305 0.01 305 $~20'x20'x10' room full of air
+2 RPP -20 20 -20 20 4.0 20 $~5'x5'x3' central box of air containing source
+3 RPP -35 35 -35 35 4.0 35 $concrete
+4 RPP -85 85 -85 85 4.0 85 $borated poly blocks
+13 RPP -305 305 -305 305 0.02 4.0 $concrete floor
+
+c Materials Cards
+C Air
+m1   6000 0.000150 $carbon          double checked
+     7014 0.784431 $nitrogen
+     8016 0.210748 $oxygen
+     18000 0.004671  $argon
+c
+c Borated Polyethylene, 10 wt% B4C              
+m2   1001 0.627759 $hydrogen in poly          double checked
+     5011 0.046690 $boron in the B4C 5011
+     6000 0.325552 $carbon in both poly and B4C
+c
+c Concrete (Regular)
+m3   1001 0.168038 $hydrogen     double checked
+     8016 0.563183 $oxygen
+     11023 0.021365 $sodium
+     13027 0.0213231 $aluminum
+     14000 0.203231 $silicon
+     20000 0.018595 $calcium
+     26000 0.004246 $iron
+c The source information
+MODE N   $particle mode and add P later for photons
+PHYS:N 15.0 0 $set an upper limit on neutron energy of 15 MeV and a capture limit of 0 MeV
+SDEF PAR=1 RAD=d1 ERG=14.1 POS=0 0 20   $(14.1 MeV DT, 2.4 MeV DD)
+SI1 0 1
+SP1 -21 1
+F5:N 60 0 20 0.5 & $Flux at a point x,y,z,r
+75 0 20 0.5 &
+100 0 20 0.5 &
+125 0 20 0.5 &
+150 0 20 0.5 &
+175 0 20 0.5 &
+200 0 20 0.5 &
+250 0 20 0.5 &
+300 0 20 0.5 &
+350 0 20 0.5 &
+400 0 20 0.5 &
+450 0 20 0.5 
+c FM5 1e6
+DF5 ic=10 iu=1 LOG $dose card
+c E5 2.5e-8 4e-7 15 $(MeV energy binning)
+NPS 1e5     $resolution (1e6 for DD, 1e8 for DT)
