@@ -24,8 +24,8 @@ c mat#   density    srfce rlatns   importance
 1   1  -0.001205      -1 2 3 4 13    imp:p=1 imp:n=1 $air
 2   1  -0.001205      -2  13         imp:p=1 imp:n=1 $air
 c 3   5  -3.67          -70          imp:p=1 imp:n=1 $NaI
-4   3  -2.300000      -3  2          imp:p=1 imp:n=1 $Concrete blocks
-5   2  -1.19          -4  3          imp:p=1 imp:n=1 $borated poly
+4   1  -0.001205      -3  2          imp:p=1 imp:n=1 $air
+5   1  -0.001205      -4  3          imp:p=1 imp:n=1 $air
 6   3  -2.300000      -13            imp:p=1 imp:n=1 $concrete floor
 7   0                  1             imp:p=0 imp:n=0 $outside void
 
@@ -51,11 +51,6 @@ c m2   1001 0.645175 $hydrogen in poly
 c     5010 0.005055 $boron-10
 c     5011 0.020735 $boron-11
 c     6000 0.329035 $carbon in both poly and B4C
-c Borated Polyethylene, 10 wt% B4C              
-c m2  1001 0.627759 $hydrogen in poly          
-c     5010 0.009338 $boron-10
-c     5011 0.037352 $boron-11
-c     6000 0.325552 $carbon in both poly and B4C
 c Borated Polyethylene, 30 wt% B4C              
 m2   1001 0.533908 $hydrogen in poly          
      5010 0.034149 $boron-10

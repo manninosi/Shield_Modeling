@@ -53,11 +53,6 @@ def getDose(filename, dose_index, hours, neutron_rate):
             pass
     f.close()
     return dose_list, error_list, x_location, y_location, z_location
-# input value then find element in an array closest to that inputted value
-def find_nearest(array, value):
-    array = np.asarray(array)
-    idx = (np.abs(array - value)).argmin()
-    return array[idx], idx
 
 file_name = sys.argv[1] # variable never invoked
 
@@ -76,8 +71,6 @@ ax.set_ylabel('Dose Rate(mrem/hr)')
 ax.set_xlabel('Distance(cm)')
 
 #Looping through all MCNP output files listed in the command line
-doses_of_interest = []
-points_of_interest = []
 for i in range(1,len(sys.argv)):
     #print sys.argv[i]
     dose_index, point_of_interest = findDetectors(sys.argv[i])
@@ -89,38 +82,13 @@ for i in range(1,len(sys.argv)):
     x_loc_plot.append(x_location)
     y_loc_plot.append(y_location)
     z_loc_plot.append(z_location)
-    name = sys.argv[i][:-4]  # file name without .txt
+    name = sys.argv[i][:-4]  #file name without .txt
     ax.plot(x_location,dose , '-', label = name)
 
     # KG [
-    #find x-value 30 cm from shielding and interpolate dose at that point
-    #check if x value 30 cm from shielding already matches a detector location
-    points_of_interest.append(point_of_interest)
-    if point_of_interest in x_location:
-        for i in range(len(x_location)):
-            if point_of_interest == x_location[i]:
-                index = i
-            else:
-                pass
-        doses_of_interest.append(dose[index])
-    else:
-        #search for other bordering x value and associated dose
-        x_loc_bordering_dets = []
-        dose_at_dets = []
-        nearest_x,idx = find_nearest(x_location,point_of_interest)
-        x_loc_bordering_dets.append(nearest_x)
-        dose_at_dets.append(dose[idx])
-        if point_of_interest > nearest_x:
-            x_loc_bordering_dets.append(x_location[idx+1])
-            dose_at_dets.append(dose[idx+1])
-        else:
-            x_loc_bordering_dets.insert(0, x_location[idx-1])
-            dose_at_dets.insert(0, dose[idx-1])
-        print x_loc_bordering_dets, dose_at_dets
-        #interpolate dose 30cm from shielding
-        f = interpolate.interp1d(x_loc_bordering_dets, dose_at_dets)
-        doses_of_interest.append(f(point_of_interest))
-ax.plot(points_of_interest,doses_of_interest, 'ro')
+    #interpolate dose at 30 cm from shielding
+    f = interpolate.interp1d(x_location, dose) #linear interpolation
+    ax.plot(point_of_interest,f(point_of_interest), 'ro')
     # ]
 
 #print dose
