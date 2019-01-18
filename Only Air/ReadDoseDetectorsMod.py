@@ -3,6 +3,8 @@ import os
 import numpy as np
 #import scipy.interpolate as interpolate
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
+pp = PdfPages('multipage.pdf')
 
 #Function that goes through MCNP output file and determines lines where all detectors relating
 #to dose are located
@@ -56,6 +58,8 @@ def getDose(filename, dose_index, hours, neutron_rate):
 
 file_name = sys.argv[1] # variable never invoked
 
+
+name_check = 0 #variable to iterate while user puts in input
 hours = 1
 n_rate = 1e8
 dose_plot = []
@@ -66,7 +70,7 @@ z_loc_plot = []
 figure = plt.figure()
 ax = figure.add_subplot(111)
 line, = ax.plot([], [], '*')
-ax.set_title('Air Validation Model')
+ax.set_title('Neutron Source in Air')
 ax.set_ylabel('Dose Rate(mrem/hr)')
 ax.set_xlabel('Distance(cm)')
 
@@ -82,7 +86,18 @@ for i in range(1,len(sys.argv)):
     x_loc_plot.append(x_location)
     y_loc_plot.append(y_location)
     z_loc_plot.append(z_location)
-    name = sys.argv[i][:-4]  #file name without .txt
+    print "Input small description for plot in order of file inputs"
+    name = raw_input("Enter Description: ")
+    #Loop for user to enter description of plot to be displyed on
+    #Dose rate plot
+    while name_check != 1:
+        print "Is the the name you wanted: %s" %name
+        name_check = input("Enter 1 for okay or 0 to re-enter descprtion: ")
+        if name_check != 1:
+            name = raw_input("Re-enter Description: ")
+    print "Named accepted for file %2.0f : %s\n" %(i, name)
+    name_check = 0
+    #name = sys.argv[i][:-4]  #file name without .txt
     ax.plot(x_location,dose , '-', label = name)
 
     # KG [
@@ -92,14 +107,16 @@ for i in range(1,len(sys.argv)):
     # ]
 
 #print dose
-#ax.legend()#Removing for 
-ax.set_ylim(min(dose_plot[-1])-100, max(dose_plot[0])+100)
+#ax.legend()
+ax.set_ylim(min(dose_plot[-1]), max(dose_plot[0]))
 print x_loc_plot[0]
-ax.set_xlim(min(x_loc_plot[0]) - 100, max(x_loc_plot[0])+100)
+ax.set_xlim(min(x_loc_plot[0])-50, max(x_loc_plot[0])+50)
 ax.semilogy()
 #line.set_xdata(x_loc_plot)
 #line.set_ydata(dose_plot)
 figure.canvas.draw()
+plt.savefig(pp, format='pdf')
+pp.close()
 plt.show()
 
 
