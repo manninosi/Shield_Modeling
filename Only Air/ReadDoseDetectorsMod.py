@@ -66,7 +66,7 @@ z_loc_plot = []
 figure = plt.figure()
 ax = figure.add_subplot(111)
 line, = ax.plot([], [], '*')
-ax.set_title('Air Validation Model')
+#ax.set_title('Air Validation Model')
 ax.set_ylabel('Dose Rate(mrem/hr)')
 ax.set_xlabel('Distance(cm)')
 
@@ -93,9 +93,9 @@ for i in range(1,len(sys.argv)):
 
 #print dose
 #ax.legend()#Removing for 
-ax.set_ylim(min(dose_plot[-1])-100, max(dose_plot[0])+100)
+ax.set_ylim(1, 1000)
 print x_loc_plot[0]
-ax.set_xlim(min(x_loc_plot[0]) - 100, max(x_loc_plot[0])+100)
+ax.set_xlim(min(x_loc_plot[0])-50, max(x_loc_plot[0])+50)
 ax.semilogy()
 #line.set_xdata(x_loc_plot)
 #line.set_ydata(dose_plot)
