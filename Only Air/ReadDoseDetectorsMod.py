@@ -32,7 +32,7 @@ def findDetectors(filename):
 #   filename: Name of MCNP output file
 #   dose_index: Line number provided by findDetectors() function
 #   hours: Length of time of exposure (usually 1 hour)
-#   neutron_rate: Rate of neutron emission from source  
+#   neutron_rate: Rate of neutron emission from source
 def getDose(filename, dose_index, hours, neutron_rate):
     #print filename
     f = open(filename, 'r')
@@ -45,11 +45,11 @@ def getDose(filename, dose_index, hours, neutron_rate):
     for i in dose_index:
         try:
             dose_list.append(float(lines[i].strip(" ").split()[0])*hours*neutron_rate*1000)#1000 is used to convert rem to mrem
-            error_list.append(float(lines[i].strip(" ").split()[1]))            
+            error_list.append(float(lines[i].strip(" ").split()[1]))
             x_location.append(float(lines[i-1].strip(" ").split()[-3]))
             y_location.append(float(lines[i-1].strip(" ").split()[-2]))
             z_location.append(float(lines[i-1].strip(" ").split()[-1]))
-            
+
 
         except:
             pass
