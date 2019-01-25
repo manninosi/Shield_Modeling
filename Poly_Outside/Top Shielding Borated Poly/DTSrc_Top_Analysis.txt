@@ -33,9 +33,9 @@ c 3   5  -3.67          -70          imp:p=1 imp:n=1 $NaI
 c Surface cards
 1 RPP -600 600 -305 305 0.01 305 $~20'x20'x10' room full of air
 2 RPP -20 20 -20 20 4.0 20 $~5'x5'x3' central box of air containing source
-3 RPP -50 50 -50 50 4.0 50 $Polyblocks
-4 RPP -70 70 -70 70 4.0 70 $borated poly blocks
-5 RPP -80 80 -80 80 4.0 80 $Concrete Blocks
+3 RPP -60 60 -60 60 4.0 60 $Polyblocks
+4 RPP -95 95 -95 95 4.0 95 $borated poly blocks
+5 RPP -85 85 -85 85 4.5 85 $Concrete Blocks
 13 RPP -305 305 -305 305 0.02 4.0 $concrete floor
 c 70 RCC 130 0 20 10 0 0 5 
 
@@ -84,16 +84,16 @@ PHYS:P 10
 SDEF PAR=N RAD=d1 ERG=14.1 POS=0 0 20   $(14.1 MeV DT, 2.4 MeV DD)
 SI1 0 1
 SP1 -21 1
-F5:N 0 0 20 0.5 &  $Flux at a point x,y,z,r
-0 0 30 0.5 &
-0 0 40 0.5 &
+F5:N 0 0 40 0.5 &  $Flux at a point x,y,z,r
 0 0 50 0.5 &
 0 0 60 0.5 &
 0 0 70 0.5 &
 0 0 80 0.5 &
 0 0 90 0.5 &
 0 0 100 0.5 &
-0 0 110 0.5 
+0 0 110 0.5 &
+0 0 120 0.5 &
+0 0 130 0.5 
 c Energy Bin Tally for checking for gammas on b-10 neutron reaction
 c *F8:P 3
 c E8: 0 1E-5 100i 4

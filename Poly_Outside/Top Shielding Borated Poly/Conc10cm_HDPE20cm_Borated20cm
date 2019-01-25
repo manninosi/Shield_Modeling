@@ -1,0 +1,1388 @@
+          Code Name & Version = MCNP6, 1.0
+  
+     _/      _/        _/_/_/       _/      _/       _/_/_/         _/_/_/
+    _/_/  _/_/      _/             _/_/    _/       _/    _/     _/       
+   _/  _/  _/      _/             _/  _/  _/       _/_/_/       _/_/_/    
+  _/      _/      _/             _/    _/_/       _/           _/    _/   
+ _/      _/        _/_/_/       _/      _/       _/             _/_/      
+  
+  +---------------------------------------------------------------------+
+  | Copyright 2008. Los Alamos National Security, LLC.  All rights      |
+  | reserved.                                                           |
+  |   This material was produced under U.S. Government contract         |
+  | DE-AC52-06NA25396 for Los Alamos National Laboratory, which is      |
+  | operated by Los Alamos National Security, LLC, for the U.S.         |
+  | Department of Energy. The Government is granted for itself and      |
+  | others acting on its behalf a paid-up, nonexclusive, irrevocable    |
+  | worldwide license in this material to reproduce, prepare derivative |
+  | works, and perform publicly and display publicly. Beginning five    |
+  | (5) years after 2008, subject to additional five-year worldwide     |
+  | renewals, the Government is granted for itself and others acting on |
+  | its behalf a paid-up, nonexclusive, irrevocable worldwide license   |
+  | in this material to reproduce, prepare derivative works, distribute |
+  | copies to the public, perform publicly and display publicly, and to |
+  | permit others to do so. NEITHER THE UNITED STATES NOR THE UNITED    |
+  | STATES DEPARTMENT OF ENERGY, NOR LOS ALAMOS NATIONAL SECURITY, LLC, |
+  | NOR ANY OF THEIR EMPLOYEES, MAKES ANY WARRANTY, EXPRESS OR IMPLIED, |
+  | OR ASSUMES ANY LEGAL LIABILITY OR RESPONSIBILITY FOR THE ACCURACY,  |
+  | COMPLETENESS, OR USEFULNESS OF ANY INFORMATION, APPARATUS, PRODUCT, |
+  | OR PROCESS DISCLOSED, OR REPRESENTS THAT ITS USE WOULD NOT INFRINGE |
+  | PRIVATELY OWNED RIGHTS.                                             |
+  +---------------------------------------------------------------------+
+  
+1mcnp     version 6     ld=05/08/13                     01/18/19 11:02:11 
+ *************************************************************************                 probid =  01/18/19 11:02:11 
+ i=DTSrc_Top_Analysis.txt o=Conc10cm_HDPE20cm_Borated20cm                        
+
+ 
+  warning.  Physics models disabled.
+         1-       Isotropic 14MeV neutron point source with poly, B poly, and concrete            
+         2-       c                                                                               
+         3-       c *********File Description************                                         
+         4-       c                                                                               
+         5-       c Description: Neutrons from a point source will trave through three materials; 
+         6-       c              poly, borated poly, and concreteye ye                            
+         7-       c                                                                               
+         8-       c Author: Scott Zimny                                                           
+         9-       c         Mitch Mannino                                                         
+        10-       c                                                                               
+        11-       c Modifcations: 11/10/2017 - Started with the point cource and three materials. 
+        12-       c               11/13/2017 - Nik E gave some pointers on F5, RPP, Mode N, 2 void
+        13-       c                            and NOTRN.                                         
+        14-       c               11/27/2017 - Met with both Dr. Palmers to gain more insight on m
+        15-       c                            bodies, NOTRN, outside void, and particle mode. Add
+        16-       c                1/26/2018 - Met with Mitch and Dr. Reese to discuss further ste
+        17-       c                1/28/2018 - Working on F2, e0, DM, etc.                        
+        18-       c                1/29/2018 - Added surface tallies to macrobodies, added PHYS (w
+        19-       c                1/30/2018 - Added poly and lead cell, surface, and mat cards   
+        20-       c                2/12/2018 - Dose card was put in a few days ago, doing geometry
+        21-       c                6/21/2018 - Made concrete and poly boxes one macro body instead
+        22-       c Cell Cards                                                                    
+        23-       c mat#   density    srfce rlatns   importance                                   
+        24-       1   1  -0.001205      -1 2 4 5 13    imp:p=1 imp:n=1 $air                       
+        25-       2   1  -0.001205      -2  13         imp:p=1 imp:n=1 $air                       
+        26-       c 3   5  -3.67          -70          imp:p=1 imp:n=1 $NaI                       
+        27-       4   6  -0.93      -3  2          imp:p=1 imp:n=1 $Poly non-bor blocks           
+        28-       8   3  -2.300000      -5 4           imp:p=1 imp:n=1 $Cocrete                   
+        29-       5   2  -1.19          -4  3          imp:p=1 imp:n=1 $borated poly              
+        30-       6   3  -2.300000      -13            imp:p=1 imp:n=1 $concrete floor            
+        31-       7   0                  1             imp:p=0 imp:n=0 $outside void              
+        32-                                                                                       
+        33-       c Surface cards                                                                 
+        34-       1 RPP -600 600 -305 305 0.01 305 $~20'x20'x10' room full of air                 
+        35-       2 RPP -20 20 -20 20 4.0 20 $~5'x5'x3' central box of air containing source      
+        36-       3 RPP -50 50 -50 50 4.0 50 $Polyblocks                                          
+        37-       4 RPP -70 70 -70 70 4.0 70 $borated poly blocks                                 
+        38-       5 RPP -30 30 -30 30 4.0 30 $Concrete Blocks                                     
+        39-       13 RPP -305 305 -305 305 0.02 4.0 $concrete floor                               
+        40-       c 70 RCC 130 0 20 10 0 0 5                                                      
+        41-                                                                                       
+        42-       c Materials Cards                                                               
+        43-       c Air                                                                           
+        44-       m1   6000 0.000150 $carbon          double checked                              
+        45-            7014 0.784431 $nitrogen                                                    
+        46-            8016 0.210748 $oxygen                                                      
+        47-            18000 0.004671  $argon                                                     
+        48-       c NaI                                                                           
+        49-       m5   81205 0.001 $NaI(Tl)                                                       
+  warning.  material        5 is not used in the problem.
+        50-            11023 0.499 53127 0.5                                                      
+        51-       c Polyethylene                                                                  
+        52-       m6   1001 0.666662                                                              
+        53-            6000 0.333338                                                              
+        54-       c Borated Polyethylene, 5 wt% B4C                                               
+        55-       c m2   1001 0.645175 $hydrogen in poly                                          
+        56-       c     5010 0.005055 $boron-10                                                   
+        57-       c     5011 0.020735 $boron-11                                                   
+        58-       c     6000 0.329035 $carbon in both poly and B4C                                
+        59-       c Borated Polyethylene, 10 wt% B4C                                              
+        60-       m2  1001 0.627759 $hydrogen in poly                                             
+        61-            5010 0.009338 $boron-10                                                    
+        62-            5011 0.037352 $boron-11                                                    
+        63-            6000 0.325552 $carbon in both poly and B4C                                 
+        64-       c Borated Polyethylene, 30 wt% B4C                                              
+        65-       c m2   1001 0.533908 $hydrogen in poly                                          
+        66-       c      5010 0.034149 $boron-10                                                  
+        67-       c      5011 0.140082 $boron-11                                                  
+        68-       c      6000 0.310512 $carbon in both poly and B4C                               
+        69-       c Concrete (Portland Cement)   double checked                                   
+        70-       m3   1001  0.168759 $hydrogen                                                   
+        71-            6000  0.001416 $carbon                                                     
+        72-            8016  0.562524 $oxygen                                                     
+        73-            11023 0.011838 $sodium                                                     
+        74-            12000 0.001400 $magnesium                                                  
+        75-            13027 0.021354 $aluminum                                                   
+        76-            14000 0.204115 $silicon                                                    
+        77-            19000 0.005656 $potassium                                                  
+        78-            20000 0.018674 $calcium                                                    
+        79-            26000 0.004264 $iron                                                       
+        80-       c The source information                                                        
+        81-       MODE N P  $particle mode and add P later for photons                            
+  comment.  photonuclear physics may be needed (phys:p).
+        82-       PHYS:N 100 0 $set an upper limit on neutron energy of 15 MeV and a capture limit
+        83-       PHYS:P 10                                                                       
+        84-       SDEF PAR=N RAD=d1 ERG=14.1 POS=0 0 20   $(14.1 MeV DT, 2.4 MeV DD)              
+        85-       SI1 0 1                                                                         
+        86-       SP1 -21 1                                                                       
+        87-       F5:N 0 0 20 0.5 &  $Flux at a point x,y,z,r                                     
+        88-       0 0 30 0.5 &                                                                    
+        89-       0 0 40 0.5 &                                                                    
+        90-       0 0 50 0.5 &                                                                    
+        91-       0 0 60 0.5 &                                                                    
+        92-       0 0 70 0.5 &                                                                    
+        93-       0 0 80 0.5 &                                                                    
+        94-       0 0 90 0.5 &                                                                    
+        95-       0 0 100 0.5 &                                                                   
+        96-       0 0 110 0.5                                                                     
+        97-       c Energy Bin Tally for checking for gammas on b-10 neutron reaction             
+        98-       c *F8:P 3                                                                       
+        99-       c E8: 0 1E-5 100i 4                                                             
+       100-       c FM5 1e6                                                                       
+       101-       DF5 ic=10 iu=1 LOG $dose card                                                   
+       102-       c E5 2.5e-8 4e-7 15 $(MeV energy binning)                                       
+       103-       NPS 2e5     $resolution (1e6 for DD, 1e8 for DT)                                
+ 
+  comment.  total nubar used if fissionable isotopes are present.
+
+ surface        1.3 and surface       13.3 are the same.       13.3 will be deleted.
+
+ surface        1.4 and surface       13.4 are the same.       13.4 will be deleted.
+
+ surface        2.6 and surface        3.6 are the same.        3.6 will be deleted.
+
+ surface        2.6 and surface        4.6 are the same.        4.6 will be deleted.
+
+ surface        2.6 and surface        5.6 are the same.        5.6 will be deleted.
+
+ surface        2.6 and surface       13.5 are the same.       13.5 will be deleted.
+ 
+  comment.           6 surfaces were deleted for being the same as others.
+ 
+  warning.  there are only neutron tallies in this problem.
+1cells                                                                                                  print table 60
+
+                               atom        gram                                            neutron    photon     photon wt             
+              cell      mat   density     density     volume       mass            pieces importance importance generation             
+
+        1        1        1  4.98947E-05 1.20500E-03 2.20478E+08 2.65676E+05           0  1.0000E+00 1.0000E+00 -1.000E+00             
+        2        2        1  4.98947E-05 1.20500E-03 2.56000E+04 3.08480E+01           0  1.0000E+00 1.0000E+00 -1.000E+00             
+        3        4        6  1.19781E-01 9.30000E-01 4.34400E+05 4.03992E+05           0  1.0000E+00 1.0000E+00 -1.000E+00             
+        4        8        3  8.14397E-02 2.30000E+00 0.00000E+00 0.00000E+00           0  1.0000E+00 1.0000E+00 -1.000E+00             
+        5        5        2  1.41973E-01 1.19000E+00 8.33600E+05 9.91984E+05           0  1.0000E+00 1.0000E+00 -1.000E+00             
+        6        6        3  8.14397E-02 2.30000E+00 1.48096E+06 3.40620E+06           0  1.0000E+00 1.0000E+00 -1.000E+00             
+        7        7        0  0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00           0  0.0000E+00 0.0000E+00 -1.000E+00             
+
+ total                                               2.23253E+08 5.06789E+06
+
+    minimum source weight = 1.0000E+00    maximum source weight = 1.0000E+00
+
+ ***************************************************
+ * Random Number Generator  =                    1 *
+ * Random Number Seed       =       19073486328125 *
+ * Random Number Multiplier =       19073486328125 *
+ * Random Number Adder      =                    0 *
+ * Random Number Bits Used  =                   48 *
+ * Random Number Stride     =               152917 *
+ ***************************************************
+
+
+         3 warning messages so far.
+1cross-section tables                                                                                   print table 100
+     XSDIR used: E:\MCNP\MCNP_DATA/xsdir_mcnp6.1
+
+     table    length
+
+                        tables from file xdata/endf71x/H/1001.710nc                                      
+
+ particle-production data for deuterons being expunged from   1001.80c
+   1001.80c   15325  H1 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)          mat 125      12/17/12
+
+                        tables from file xdata/endf71x/B/5010.710nc                                      
+
+ particle-production data for alphas    being expunged from   5010.80c
+   5010.80c   39393  B10 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)         mat 525      12/14/12
+
+                        tables from file xdata/endf71x/B/5011.710nc                                      
+
+ particle-production data for protons   being expunged from   5011.80c
+ particle-production data for alphas    being expunged from   5011.80c
+   5011.80c  122435  B11 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)         mat 528      12/14/12
+
+                        tables from file xdata/endf71x/C/6000.710nc                                      
+
+ particle-production data for protons   being expunged from   6000.80c
+ particle-production data for deuterons being expunged from   6000.80c
+ particle-production data for alphas    being expunged from   6000.80c
+   6000.80c   53935  C0 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)          mat 600      12/20/12
+
+                        tables from file xdata/endf71x/N/7014.710nc                                      
+
+ particle-production data for protons   being expunged from   7014.80c
+ particle-production data for deuterons being expunged from   7014.80c
+ particle-production data for alphas    being expunged from   7014.80c
+   7014.80c  100908  N14 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)         mat 725      12/16/12
+
+                        tables from file xdata/endf71x/O/8016.710nc                                      
+
+ particle-production data for protons   being expunged from   8016.80c
+ particle-production data for deuterons being expunged from   8016.80c
+ particle-production data for tritons   being expunged from   8016.80c
+ particle-production data for alphas    being expunged from   8016.80c
+   8016.80c  262992  O16 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)         mat 825      12/13/12
+
+                        tables from file xdata/endf71x/Na/11023.710nc                                    
+
+  11023.80c   62862  Na23 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)        mat1125      12/22/12
+
+                        tables from file xdata/actia                                                     
+
+  12000.62c   59215  12-mg-0 at 293.6K from endf/b-vi.8 njoy99.50                                 mat1200      12/06/01
+  19000.62c   41328  19-k-0 at 293.6K from endf/b-vi.8 njoy99.50                                  mat1900      12/06/01
+ particle-production data for protons   being expunged from  20000.62c
+ particle-production data for deuterons being expunged from  20000.62c
+ particle-production data for tritons   being expunged from  20000.62c
+ particle-production data for alphas    being expunged from  20000.62c
+  20000.62c  121505  20-ca-0 at 293.6K from endf-vi.8 njoy99.50                                   mat2000      12/05/01
+
+                        tables from file xdata/endf71x/Al/13027.710nc                                    
+
+ particle-production data for protons   being expunged from  13027.80c
+ particle-production data for deuterons being expunged from  13027.80c
+ particle-production data for tritons   being expunged from  13027.80c
+ particle-production data for alphas    being expunged from  13027.80c
+  13027.80c  154504  Al27 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)        mat1325      12/22/12
+
+                        tables from file xdata/endf60                                                    
+
+  14000.60c   98643  14-si-nat from endf/b-vi                                                     mat1400      11/25/93
+
+                        tables from file xdata/rmccsa                                                    
+
+  18000.35c    4566      endl85                                                                   (  18)       11/01/85
+                     temperature = 0.0000E+00 adjusted to 2.5300E-08
+
+                        tables from file xdata/rmccs                                                     
+
+  26000.55c  142443  njoy                                                                       ( 260)       10/21/82  
+
+                        tables from file xdata/mcplib84                                                  
+
+   1000.84p    1974  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+   5000.84p    3192  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+   6000.84p    3228  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+   7000.84p    3270  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+   8000.84p    3348  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+  11000.84p    4071  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+  12000.84p    3857  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+  13000.84p    4922  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+  14000.84p    4868  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+  18000.84p    4772  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+  19000.84p    5123  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+  20000.84p    5089  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+  26000.84p    5794  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+
+  total     1333562
+
+ any neutrons with energy greater than emax = 1.00000E+02 from the source or from a collision will be resampled.
+
+ neutron cross sections outside the range from 0.0000E+00 to 1.0000E+02 mev are expunged.
+ 
+  warning.  neutron energy cutoff is below some cross-section tables.
+ 
+  comment.     1 cross sections modified by free gas thermal treatment.
+
+ maximum photon energy set to    100.0 mev (maximum electron energy)
+
+                        tables from file xdata/el03                                                      
+
+   1000.03e    2329                                                                                          6/6/98    
+   5000.03e    2331                                                                                          6/6/98    
+   6000.03e    2333                                                                                          6/6/98    
+   7000.03e    2333                                                                                          6/6/98    
+   8000.03e    2333                                                                                          6/6/98    
+  11000.03e    2337                                                                                          6/6/98    
+  12000.03e    2337                                                                                          6/6/98    
+  13000.03e    2337                                                                                          6/6/98    
+  14000.03e    2339                                                                                          6/6/98    
+  18000.03e    2341                                                                                          6/6/98    
+  19000.03e    2343                                                                                          6/6/98    
+  20000.03e    2343                                                                                          6/6/98    
+  26000.03e    2345                                                                                          6/6/98    
+
+1particles and energy limits                                                                            print table 101
+
+                         particle      maximum       smallest      largest       always        always
+                         cutoff        particle      table         table         use table     use model
+   particle type         energy        energy        maximum       maximum       below         above
+
+    1  n    neutron     0.0000E+00    1.0000E+02    2.0000E+01    1.0200E+02    1.0000E+36    1.0000E+36
+    2  p    photon      1.0000E-03    1.0000E+02    1.0000E+05    1.0000E+05    1.0000E+36    1.0000E+36
+    3  e    electron    1.0000E-03    1.0000E+02    1.0000E+02    1.0000E+02    1.0000E+36    1.0000E+36
+ 
+
+ ***********************************************************************************************************************
+
+ dump no.    1 on file runtpe     nps =           0     coll =              0     ctm =        0.00   nrn =             
+    0
+
+         4 warning messages so far.
+ warning.  unusual exponent for sampling source rad.                   
+ nps =           1     nrn =                   1                                      
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  4 8.3354E-02 8.8615E-01 5.7876E-01 8.5450E-01 6.4550E-01 5.0000E-01 1.1334E-01     5        4628   12                 211         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  4 5.4193E-02 9.4699E-01 2.0074E-01 1.0211E-01 7.1000E-01 5.0000E-01 1.1759E+01     5        5507    1                  27         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 2.4103E-03 9.4699E-01 5.9122E+00 1.3109E+00 9.9831E+00 5.0000E-01 1.4090E+01     5        5507    1                  27         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 2.9497E-01 1.9997E+00 1.9750E+00 1.2896E+00 7.6603E-01 5.0000E-01 1.3955E-02     4        9358    8                 177         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 2.6283E+00 8.6230E-01 2.6682E+00 9.7734E-01 4.3099E-01 5.0000E-01 4.8194E-08     4        9834   93                2137         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 1.3932E-03 1.8734E+00 1.5935E+00 4.9032E-01 1.4452E+01 5.0000E-01 4.9312E+00     5        9859    4                  79         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 9.5341E-01 9.4692E-01 5.7005E-01 1.3786E-01 4.3505E-01 5.0000E-01 1.8106E+00     4       10628    6                 109         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  2 2.3383E+00 5.7263E-01 3.4526E+00 6.7125E-01 3.1982E-01 5.0000E-01 7.9279E-08     4       11061  221                4982         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 1.6446E-02 9.9986E-01 7.2148E-01 8.5854E-01 1.7200E+00 5.0000E-01 1.0507E+00     5       13695    7                 122         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  4 1.4743E-01 1.9999E+00 8.7329E-01 3.1380E-01 1.1737E+00 5.0000E-01 2.5006E+00     4       14911    1                  31         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 3.0671E-02 1.6126E+00 8.9393E-01 1.5563E+00 1.2561E+00 5.0000E-01 1.3828E-01     5       18989    8                 145         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 6.9824E-04 1.8003E+00 1.9436E+00 1.9748E+00 1.0521E+01 5.0000E-01 6.1219E+00     5       19443    5                 106         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 1.5723E-03 9.8178E-01 4.4391E+00 1.5057E+00 9.8932E+00 5.0000E-01 1.0922E+01     5       19804    2                  40         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 9.6471E-04 9.9895E-01 1.3369E+00 1.4804E-02 1.4734E+01 5.0000E-01 1.1467E-05     5       23396   19                 401         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 1.0839E-03 8.6004E-01 3.4559E+00 6.3218E-01 1.5230E+01 5.0000E-01 1.3860E+01     5       24112    1                  26         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 6.2443E-01 1.8938E+00 1.1634E+00 2.5719E-01 6.5896E-01 5.0000E-01 1.2618E+00     4       26213    5                  98         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  4 4.6363E-02 1.9999E+00 1.3393E+00 4.2722E-01 2.4491E+00 5.0000E-01 6.3332E+00     4       27372    1                  28         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  4 3.8370E-02 1.9999E+00 1.0607E+00 1.9032E+00 1.1454E+00 5.0000E-01 1.6449E-02     4       27372    3                  71         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 8.7330E-03 1.9999E+00 1.9380E+00 8.8399E-01 5.4019E+00 5.0000E-01 6.7459E+00     5       28286    2                  48         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 4.3724E-03 1.9998E+00 1.7026E+00 1.2770E+00 5.8790E+00 5.0000E-01 4.8670E+00     5       28286    3                  64         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 1.2702E-03 9.9988E-01 6.1646E-01 1.7617E+00 3.6421E+00 5.0000E-01 1.1255E+00     5       28286    5                  97         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  2 1.0172E+01 1.5961E+00 5.7628E+00 9.9978E-01 4.1174E-01 5.0000E-01 3.4630E-08     4       29270   44                1041         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 1.0864E+00 9.0154E-01 1.1279E+00 9.6837E-01 3.7221E-01 5.0000E-01 2.6201E-08     4       29625  252                5981         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 9.7787E-04 8.1613E-01 4.9453E+00 1.6477E+00 1.1245E+01 5.0000E-01 1.1430E+01     5       33915    3                  49         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 1.0778E-03 1.8939E+00 1.5605E+00 7.3043E-01 1.4499E+01 5.0000E-01 5.8466E+00     5       35858    2                  37         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 7.6911E-03 1.9999E+00 1.5696E+00 1.4476E+00 3.9081E+00 5.0000E-01 1.8241E+00     5       36289    3                  57         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 2.6032E-03 1.9999E+00 1.9116E+00 4.8017E-01 1.2025E+01 5.0000E-01 2.7362E+00     5       36289    3                  57         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 1.2495E-03 1.4555E+00 1.5369E+00 5.5468E-01 1.2791E+01 5.0000E-01 9.9848E-01     5       36695   12                 198         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 2.3948E-01 1.8937E+00 9.7833E-01 1.2384E+00 5.9739E-01 5.0000E-01 1.4216E-03     5       37614   12                 257         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 7.7561E-03 9.4660E-01 4.3067E-01 2.1083E+00 1.0079E+00 5.0000E-01 6.7339E-04     5       37614   16                 340         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 1.1082E-03 1.9999E+00 1.3762E+00 2.1307E+00 6.8510E+00 5.0000E-01 2.6971E+00     5       38553    2                  45         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 2.0317E-03 1.9999E+00 1.9471E+00 3.8172E-01 1.4430E+01 5.0000E-01 6.2326E+00     5       39925    2                  49         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 4.7749E-03 1.8800E+00 1.6957E+00 1.1389E+00 5.8327E+00 5.0000E-01 6.2225E+00     5       42400    3                  53         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 2.2607E-03 7.9789E-01 3.3048E+00 1.3559E+00 6.9167E+00 5.0000E-01 8.0264E+00     5       46432    3                  65         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 8.2015E-01 5.5158E-01 1.4074E+00 9.1780E-01 3.4522E-01 5.0000E-01 2.4185E-08     4       48238  293                6985         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  2 1.0376E+01 1.9488E+00 4.4899E+00 1.0107E+00 4.8451E-01 5.0000E-01 8.3235E-08     4       49182   28                 658         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  4 7.1822E-01 8.9292E-01 4.3790E-01 6.7143E-02 4.2765E-01 5.0000E-01 6.9957E+00     5       58183    3                  54         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 1.1089E-02 8.4877E-01 2.0733E+00 7.1209E-01 3.5202E+00 5.0000E-01 7.8973E+00     5       60459    5                  78         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 1.4189E-02 1.6974E+00 9.9273E-01 2.5352E+00 1.2238E+00 5.0000E-01 1.4958E-03     5       60459    9                 160         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 6.9623E-01 1.8939E+00 1.5114E+00 3.8365E-01 6.6772E-01 5.0000E-01 5.9628E-01     4       61250    3                  66         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  4 6.4025E-02 1.8937E+00 1.7663E+00 1.0918E+00 1.6704E+00 5.0000E-01 4.5817E-01     4       62864    8                 171         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 1.6648E-01 1.8938E+00 1.2172E+00 3.2281E-01 1.2632E+00 5.0000E-01 4.3984E+00     5       67313    3                  60         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 3.3382E-02 9.4691E-01 5.3911E-01 5.0128E-01 1.2142E+00 5.0000E-01 1.5099E+00     5       67313    4                  72         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 1.3313E+00 5.3379E-01 2.4698E+00 1.3820E+00 4.7795E-01 5.0000E-01 1.8173E-08     4       70602  299                6785         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  2 4.3152E+00 1.9999E+00 1.2072E+00 1.2859E-01 4.7937E-01 5.0000E-01 2.4782E+00     4       74334    2                  47         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  4 7.3776E-02 1.8939E+00 1.8422E+00 2.7348E-01 2.3929E+00 5.0000E-01 1.2456E+01     4       75328    2                  39         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 1.8118E-03 9.0116E-01 4.4414E+00 1.3010E+00 9.7836E+00 5.0000E-01 1.3904E+01     5       75450    2                  31         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  4 1.3042E-01 7.0981E-01 2.5165E+00 1.7548E+00 6.1397E-01 5.0000E-01 1.8870E-08     4       91364  121                2732         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  4 3.2558E-01 3.5139E-01 8.7221E-01 7.3518E-01 2.7946E-01 5.0000E-01 2.5134E-08     4       91364  122                2748         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  2 5.5758E+00 6.3287E-01 8.1029E+00 1.2227E+00 4.8654E-01 5.0000E-01 2.9978E-08     4       92845  207                4657         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 5.7606E-01 5.1067E-01 1.1073E+00 1.2845E+00 4.5137E-01 5.0000E-01 1.9141E-08     4       95010  154                3549         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 9.3235E-01 1.8939E+00 3.9258E-01 6.5556E-01 3.6026E-01 5.0000E-01 1.7311E-04     4       95588    6                 122         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  4 4.8033E-01 5.6207E-01 7.2720E-01 8.6316E-01 4.0527E-01 5.0000E-01 7.1019E-08     4       97564   73                1697         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  4 5.6623E-01 5.5755E-01 8.4945E-01 8.0348E-01 3.9257E-01 5.0000E-01 9.8325E-08     4       97564   74                1721         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  4 3.7551E-01 5.4561E-01 6.5014E-01 1.1642E+00 4.3960E-01 5.0000E-01 2.4526E-08     4       97564   76                1756         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 1.9230E-02 5.8859E-01 4.7025E-01 8.5861E-01 9.8524E-01 5.0000E-01 3.3765E-01     5       99354   13                 261         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 1.0499E-02 5.8859E-01 4.2699E-01 1.0900E+00 1.1318E+00 5.0000E-01 2.6945E-01     5       99354   14                 277         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  4 1.1428E-01 8.4725E-01 9.5346E-01 1.3249E-01 9.9269E-01 5.0000E-01 8.3731E+00     4       99914    3                  40         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 3.5503E-01 1.9235E+00 1.2779E+00 1.3720E+00 5.2861E-01 5.0000E-01 2.6427E-08     4      101404   27                 592         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 1.0013E-03 1.3529E+00 1.9046E+00 2.6057E+00 5.4998E+00 5.0000E-01 1.1855E+00     5      102415   10                 176         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  2 3.5984E+00 1.5918E+00 1.9089E+00 9.4235E-01 4.5032E-01 5.0000E-01 8.1131E-08     4      102444   46                1040         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 2.6041E-02 1.9974E+00 5.7098E-01 1.9649E+00 9.8845E-01 5.0000E-01 7.8102E-03     5      103301   14                 296         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 4.2024E-01 9.2072E-01 4.4302E-01 1.3420E+00 4.8141E-01 5.0000E-01 2.0499E-08     4      104396   25                 530         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 7.4944E-01 9.1133E-01 7.4160E-01 7.7889E-01 3.2256E-01 5.0000E-01 3.5489E-08     4      104396   26                 554         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 4.9640E-01 9.0254E-01 4.7953E-01 6.1444E-01 2.7331E-01 5.0000E-01 5.0540E-08     4      104396   27                 575         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  2 2.6544E+00 8.8433E-01 1.6185E+00 2.8291E-02 2.3930E-01 5.0000E-01 1.0450E+01     4      105401    2                  27         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 6.4347E-03 1.8939E+00 1.3997E+00 8.6037E-01 5.2664E+00 5.0000E-01 6.6159E+00     5      107821    2                  40         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 1.6198E-03 1.8939E+00 1.8592E+00 5.3748E-01 1.4217E+01 5.0000E-01 1.2430E+01     5      107821    2                  40         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  4 3.1710E+00 6.5175E-01 2.6663E+00 7.9052E-02 4.3018E-01 5.0000E-01 4.9258E+00     4      108681    7                 133         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  4 3.7791E-01 6.5174E-01 3.2133E-01 4.5719E-02 1.9956E-01 5.0000E-01 4.3242E+00     4      108681    8                 145         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 3.2274E-02 1.9999E+00 1.6825E+00 4.6222E-01 3.2330E+00 5.0000E-01 1.0452E+01     5      111364    1                  32         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 4.0386E-01 7.7254E-01 4.6462E-01 1.1505E+00 4.9115E-01 5.0000E-01 4.0849E-08     4      112168   53                1208         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 1.1933E-03 1.4945E+00 1.3548E+00 5.9269E-01 1.2218E+01 5.0000E-01 6.9997E-02     5      112716   10                 212         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  2 4.6807E+00 1.9995E+00 1.8581E+00 8.5554E-01 4.7589E-01 5.0000E-01 2.1803E-03     4      113415    9                 221         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 1.0708E+00 8.6507E-01 1.0341E+00 8.6771E-01 4.2506E-01 5.0000E-01 1.0079E-07     4      114750   39                 919         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 1.6326E-03 1.9998E+00 1.5703E+00 3.3883E-01 1.4770E+01 5.0000E-01 1.3800E+00     5      115160    6                 120         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  8 8.9252E-04 1.9998E+00 1.8530E+00 2.2208E-01 2.3004E+01 5.0000E-01 1.9330E+00     5      115160    6                 120         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 9.4951E-01 7.4621E-01 1.1581E+00 1.0902E+00 4.4304E-01 5.0000E-01 3.2710E-08     4      116787   52                1132         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 1.0522E-03 1.8911E+00 1.3271E+00 2.5566E+00 5.4262E+00 5.0000E-01 1.2210E+00     5      117217    7                 137         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 3.2383E-03 9.4319E-01 1.7478E+00 3.5301E+00 1.5408E+00 5.0000E-01 1.3603E-05     5      117217   20                 420         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 4.1466E-03 9.4143E-01 1.3780E+00 3.3549E+00 1.3185E+00 5.0000E-01 3.0307E-06     5      117217   22                 459         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 1.4060E-03 8.3550E-01 4.0887E+00 1.4367E+00 9.5872E+00 5.0000E-01 1.1147E+01     5      117407    4                  77         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 1.4522E-02 1.7462E+00 1.8802E+00 6.9615E-01 4.2352E+00 5.0000E-01 6.7190E+00     5      117657    4                  80         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 4.5118E-02 7.6949E-01 4.8410E-01 3.4301E-01 9.6565E-01 5.0000E-01 2.9213E+00     5      120064    6                 112         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 4.8591E-01 9.0278E-01 5.3437E-01 1.3029E+00 4.4853E-01 5.0000E-01 1.7911E-08     4      123137   32                 713         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  4 2.0312E-01 1.9998E+00 1.6424E+00 4.5242E-01 1.2794E+00 5.0000E-01 1.5028E+00     4      124210    5                 104         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 1.8938E-03 8.5443E-01 2.0550E+00 1.0025E+00 7.3586E+00 5.0000E-01 1.3649E+01     5      124347    3                  45         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 1.9131E-03 8.1011E-01 1.2792E-01 3.5120E-01 2.4633E+00 5.0000E-01 1.2222E+01     5      124347    4                  56         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 1.3599E-03 8.1011E-01 1.6638E+00 1.8057E-01 1.1475E+01 5.0000E-01 1.3363E+01     5      124347    4                  56         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 2.1455E-03 1.4387E+00 1.5551E+00 1.3478E+00 6.5667E+00 5.0000E-01 5.4107E+00     5      125203    4                  66         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 2.8700E-03 1.8840E+00 1.7158E+00 1.1109E+00 7.6828E+00 5.0000E-01 1.0081E+01     5      126364    3                  61         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  4 1.6004E-01 5.9756E-01 1.6665E+00 1.1897E+00 5.4897E-01 5.0000E-01 6.3042E-08     4      126687  144                3244         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  4 2.3298E-01 2.9642E-01 7.4950E-01 5.4805E-01 2.0325E-01 5.0000E-01 2.2993E-08     4      126687  145                3265         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 1.0308E-02 8.6863E-01 4.7434E+00 7.8434E-01 5.3886E+00 5.0000E-01 1.2132E+01     5      130632    3                  51         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 1.3058E+00 1.9998E+00 1.9943E+00 2.4857E-01 6.1572E-01 5.0000E-01 1.1848E+00     4      132733    5                 117         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 4.7742E-01 5.1037E-01 8.0842E-01 7.2098E-01 3.2699E-01 5.0000E-01 5.6550E-08     4      141126   89                2040         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 8.6766E-03 1.8939E+00 1.5138E+00 9.0022E-01 4.6234E+00 5.0000E-01 8.1205E+00     5      141480    2                  38         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 1.6994E-03 1.8939E+00 1.8625E+00 5.2789E-01 1.3959E+01 5.0000E-01 1.2921E+01     5      141480    2                  38         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 4.5768E-01 4.9488E-01 8.0909E-01 1.0756E+00 4.7492E-01 5.0000E-01 4.8527E-08     4      142565  243                5702         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 2.0177E-03 1.9467E+00 1.6206E+00 1.9276E+00 6.0171E+00 5.0000E-01 2.4491E+00     5      144055    6                 103         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 1.9895E-03 9.7333E-01 6.9325E-01 1.3542E+00 3.7329E+00 5.0000E-01 1.8832E+00     5      144055    7                 118         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 2.2481E-03 1.9466E+00 4.8659E-01 3.1160E+00 1.7242E+00 5.0000E-01 2.6789E-02     5      144055   11                 201         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 2.5714E-03 1.9466E+00 1.8419E+00 6.3041E-01 1.0869E+01 5.0000E-01 3.8646E-01     5      144055   11                 201         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 1.5246E-02 1.9466E+00 8.1290E-01 2.3320E+00 1.2665E+00 5.0000E-01 2.2708E-02     5      144055   12                 219         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 3.6466E-03 1.9466E+00 1.5932E+00 2.5297E-01 1.0252E+01 5.0000E-01 8.7980E-02     5      144055   12                 219         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  8 9.1853E-04 1.9466E+00 1.5652E+00 2.5621E-01 2.0214E+01 5.0000E-01 8.4902E-02     5      144055   12                 219         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  2 1.9290E+00 1.7892E+00 1.0856E+00 1.1458E+00 3.8467E-01 5.0000E-01 1.6554E-08     4      158002   36                 847         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 3.1116E-03 1.7646E+00 1.5775E+00 1.3791E+00 5.9875E+00 5.0000E-01 4.6624E+00     5      160615    6                 120         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 1.2461E-03 1.7646E+00 1.7225E+00 6.6445E-01 1.4134E+01 5.0000E-01 5.6471E+00     5      160615    6                 120         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 1.2507E-03 1.8032E+00 1.1320E+00 5.5772E-01 1.2194E+01 5.0000E-01 1.4406E+00     5      165863    5                 105         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 1.3535E-02 1.7938E+00 1.6766E+00 6.1994E-01 4.3618E+00 5.0000E-01 1.0330E+01     5      169534    3                  54         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 3.6238E-02 1.9999E+00 1.6939E+00 5.2868E-01 2.9612E+00 5.0000E-01 6.4717E+00     5      169727    2                  47         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 1.3399E-02 9.9989E-01 5.6691E-01 1.9643E+00 9.7179E-01 5.0000E-01 4.9959E-03     5      169727    7                 133         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 1.0391E-01 9.9981E-01 1.4151E+00 1.4585E+00 7.0995E-01 5.0000E-01 2.5386E-03     5      169727    9                 180         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 5.9669E-01 9.9981E-01 4.9821E-01 9.6237E-01 4.7237E-01 5.0000E-01 3.7507E-03     5      169727   10                 195         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 1.4816E+00 9.9977E-01 1.2468E+00 9.6126E-01 4.6335E-01 5.0000E-01 1.3412E-03     5      169727   11                 220         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  5 3.4471E-02 1.7275E+00 1.4313E+00 2.1690E+00 1.1423E+00 5.0000E-01 1.6268E-02     5      169892    7                 148         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  2 1.9148E+00 7.8283E-01 2.4569E+00 1.3088E+00 4.4129E-01 5.0000E-01 1.6776E-08     4      172178  175                4025         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  2 1.8155E+00 1.8940E+00 6.4935E-01 4.3582E-01 4.0405E-01 5.0000E-01 1.3798E-01     4      182527    2                  42         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  2 5.0754E+00 1.6705E+00 2.6161E+00 1.0694E+00 4.8894E-01 5.0000E-01 5.9434E-08     4      183990   37                 865         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 1.3758E-03 1.9998E+00 1.2488E+00 6.2369E-01 1.2443E+01 5.0000E-01 1.7745E-01     5      187939    6                 135         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  3 4.2424E-01 4.5962E-01 9.0085E-01 1.2152E+00 4.3156E-01 5.0000E-01 1.9818E-08     4      189195  218                5093         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  2 2.6243E+00 1.9994E+00 1.0453E+00 5.0365E-01 2.7771E-01 5.0000E-01 7.1489E-04     4      192061   16                 364         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 1.7211E-03 8.9734E-01 2.7302E+00 1.1392E+00 8.5156E+00 5.0000E-01 1.3825E+01     5      192279    2                  40         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 1.9297E-03 1.8776E+00 1.9381E+00 3.1120E-01 1.4828E+01 5.0000E-01 1.0074E+00     5      194573    8                 130         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 1.6495E-03 1.9998E+00 1.4320E+00 1.6098E+00 7.4328E+00 5.0000E-01 4.9208E+00     5      195346    2                  58         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 9.6353E-02 8.4203E-01 2.7255E+00 2.4202E-01 1.7251E+00 5.0000E-01 1.2824E+01     5      195356    4                  72         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 2.9115E-03 8.4203E-01 3.7868E+00 2.4035E-01 1.1707E+01 5.0000E-01 1.2922E+01     5      195356    4                  72         5
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  6 2.1425E-02 1.9998E+00 1.8927E+00 5.5959E-01 4.0084E+00 5.0000E-01 1.2729E+01     5      196741    2                  44         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 1.8118E-03 1.9998E+00 1.9020E+00 5.4602E-01 1.3912E+01 5.0000E-01 1.2876E+01     5      196741    2                  44         4
+
+ det     t         wgt        psc       amfp       ddetx     radius       erg     cell         nps  nch   n             nrn      ipsc
+  7 1.4375E-03 1.8766E+00 1.9786E+00 7.5816E-01 1.3878E+01 5.0000E-01 2.4842E+00     5      199128    6                 130         4
+1problem summary                                                                                                           
+
+      run terminated when      200000  particle histories were done.
++                                                                                                    01/18/19 11:08:10 
+      Isotropic 14MeV neutron point source with poly, B poly, and concrete                 probid =  01/18/19 11:02:11 
+
+ neutron creation    tracks      weight        energy            neutron loss        tracks      weight        energy
+                                 (per source particle)                                           (per source particle)
+
+ source              200000    1.0000E+00    1.4100E+01          escape               90233    3.7566E-01    3.0579E+00
+ nucl. interaction        0    0.            0.                  energy cutoff            0    0.            0.        
+ particle decay           0    0.            0.                  time cutoff              0    0.            0.        
+ weight window            0    0.            0.                  weight window            0    0.            0.        
+ cell importance          0    0.            0.                  cell importance          0    0.            0.        
+ weight cutoff            0    1.1439E-01    6.3962E-05          weight cutoff       110131    1.1433E-01    4.0903E-05
+ e or t importance        0    0.            0.                  e or t importance        0    0.            0.        
+ dxtran                   0    0.            0.                  dxtran                   0    0.            0.        
+ forced collisions        0    0.            0.                  forced collisions        0    0.            0.        
+ exp. transform           0    0.            0.                  exp. transform           0    0.            0.        
+ upscattering             0    0.            6.0717E-07          downscattering           0    0.            1.0080E+01
+ photonuclear             0    0.            0.                  capture                  0    6.2578E-01    9.4918E-01
+ (n,xn)                 728    2.7571E-03    6.4319E-03          loss to (n,xn)         364    1.3786E-03    1.9139E-02
+ prompt fission           0    0.            0.                  loss to fission          0    0.            0.        
+ delayed fission          0    0.            0.                  nucl. interaction        0    0.            0.        
+ prompt photofis          0    0.            0.                  particle decay           0    0.            0.        
+ tabular boundary         0    0.            0.                  tabular boundary         0    0.            0.        
+ tabular sampling         0    0.            0.                  elastic scatter          0    0.            0.        
+     total           200728    1.1171E+00    1.4106E+01              total           200728    1.1171E+00    1.4106E+01
+
+   number of neutrons banked                     364        average time of (shakes)              cutoffs
+   neutron tracks per source particle     1.0036E+00          escape            3.3760E+03          tco   1.0000E+33
+   neutron collisions per source particle 1.2090E+02          capture           1.3556E+04          eco   0.0000E+00
+   total neutron collisions                 24179806          capture or escape 9.7372E+03          wc1  -5.0000E-01
+   net multiplication              1.0014E+00 0.0001          any termination   1.2379E+04          wc2  -2.5000E-01
+
+ photon creation     tracks      weight        energy            photon loss         tracks      weight        energy
+                                 (per source particle)                                           (per source particle)
+
+ source                   0    0.            0.                  escape               83856    4.2222E-01    6.2672E-01
+ nucl. interaction        0    0.            0.                  energy cutoff            0    0.            2.9776E-05
+ particle decay           0    0.            0.                  time cutoff              0    0.            0.        
+ weight window            0    0.            0.                  weight window            0    0.            0.        
+ cell importance          0    0.            0.                  cell importance          0    0.            0.        
+ weight cutoff            0    0.            0.                  weight cutoff            0    0.            0.        
+ e or t importance        0    0.            0.                  e or t importance        0    0.            0.        
+ dxtran                   0    0.            0.                  dxtran                   0    0.            0.        
+ forced collisions        0    0.            0.                  forced collisions        0    0.            0.        
+ exp. transform           0    0.            0.                  exp. transform           0    0.            0.        
+ from neutrons       161642    8.1324E-01    2.1718E+00          compton scatter          0    0.            1.4803E+00
+ bremsstrahlung       27564    1.3747E-01    1.1024E-02          capture             111348    5.5867E-01    2.0246E-02
+ p-annihilation        6870    3.4587E-02    1.7674E-02          pair production       3435    1.7294E-02    7.3268E-02
+ photonuclear             0    0.            0.                  photonuclear abs         0    0.            0.        
+ electron x-rays          0    0.            0.                  loss to photofis         0    0.            0.        
+ compton fluores          0    0.            0.                                                                        
+ muon capt fluores        0    0.            0.                                                                        
+ 1st fluorescence      2563    1.2885E-02    5.3569E-05                                                                
+ 2nd fluorescence         0    0.            0.                                                                        
+ (gamma,xgamma)           0    0.            0.                                                                        
+ tabular sampling         0    0.            0.                                                                        
+ prompt photofis          0    0.            0.                                                                        
+     total           198639    9.9819E-01    2.2006E+00              total           198639    9.9819E-01    2.2006E+00
+
+   number of photons banked                   196076        average time of (shakes)              cutoffs
+   photon tracks per source particle      9.9320E-01          escape            9.5283E+03          tco   1.0000E+33
+   photon collisions per source particle  8.7838E+00          capture           1.0486E+04          eco   1.0000E-03
+   total photon collisions                   1756759          capture or escape 1.0074E+04          wc1  -5.0000E-01
+                                                              any termination   9.9930E+03          wc2  -2.5000E-01
+
+ computer time so far in this run     5.92 minutes            maximum number ever in bank        10
+ computer time in mcrun               5.88 minutes            bank overflows to backup file       0
+ source particles per minute            3.4038E+04
+ random numbers generated                575814365            most random numbers used was       28738 in history      167573
+
+ range of sampled source weights = 1.0000E+00 to 1.0000E+00
+1neutron  activity in each cell                                                                         print table 126
+
+                       tracks     population   collisions   collisions     number        flux        average      average
+              cell    entering                               * weight     weighted     weighted   track weight   track mfp
+                                                          (per history)    energy       energy     (relative)      (cm)
+
+        1        1       90686        90261           71    3.1924E-04   1.2237E-01   6.5597E+00   8.6520E-01   1.1664E+04
+        2        2      269223       167126          998    3.3138E-03   2.5753E-03   9.0764E+00   8.4355E-01   9.9869E+03
+        3        4      314254       181875     23587737    6.2540E+01   5.1258E-04   4.0814E+00   6.6130E-01   3.3432E+00
+        4        8           0            0            0    0.0000E+00   0.0000E+00   0.0000E+00   0.0000E+00   0.0000E+00
+        5        5       26379        22739       229923    9.9387E-01   2.8606E-02   5.1059E+00   8.9046E-01   3.7743E+00
+        6        6      136079       106467       361077    1.1996E+00   1.5383E-03   6.2295E+00   7.7475E-01   5.3878E+00
+
+           total        836621       568468     24179806    6.4737E+01
+1photon   activity in each cell                                                                         print table 126
+
+                       tracks     population   collisions   collisions     number        flux        average      average
+              cell    entering                               * weight     weighted     weighted   track weight   track mfp
+                                                          (per history)    energy       energy     (relative)      (cm)
+
+        1        1       91683        86592         1728    8.6538E-03   1.0960E+00   1.0960E+00   1.0029E+00   1.1590E+04
+        2        2       54525        42969          125    6.2551E-04   1.6019E+00   1.6019E+00   1.0081E+00   1.4218E+04
+        3        4       94262       160258      1009497    5.0660E+00   1.0320E+00   1.0320E+00   1.0034E+00   1.2898E+01
+        4        8           0            0            0    0.0000E+00   0.0000E+00   0.0000E+00   0.0000E+00   0.0000E+00
+        5        5       99453        92199       583552    2.9246E+00   6.4101E-01   6.4101E-01   1.0024E+00   8.0670E+00
+        6        6       71958        98619       161857    8.1607E-01   1.5687E+00   1.5687E+00   1.0107E+00   7.1238E+00
+
+           total        411881       480637      1756759    8.8160E+00
+1summary of photons produced in neutron collisions
+
+              cell      number of      weight per     energy per     avg photon      mev/gm per    weight/neut    energy/neut
+                        photons       source neut    source neut      energy       source neut     collision      collision
+
+        1        1             5       2.55591E-05    6.29307E-05    2.46217E+00    2.36870E-10    8.00614E-02    1.97125E-01
+        2        2            70       3.52289E-04    1.41620E-03    4.02001E+00    4.59091E-05    1.06311E-01    4.27372E-01
+        3        4        119422       5.97110E-01    1.62051E+00    2.71391E+00    4.01123E-06    9.54771E-03    2.59117E-02
+        4        8             0       0.00000E+00    0.00000E+00    0.00000E+00    0.00000E+00    0.00000E+00    0.00000E+00
+        5        5         14518       7.25900E-02    6.55316E-02    9.02764E-01    6.60612E-08    7.30377E-02    6.59358E-02
+        6        6         27627       1.43162E-01    4.84301E-01    3.38289E+00    1.42182E-07    1.19337E-01    4.03705E-01
+        7        7             0       0.00000E+00    0.00000E+00    0.00000E+00    0.00000E+00    0.00000E+00    0.00000E+00
+             total        161642       8.13240E-01    2.17182E+00    2.67057E+00
+
+
+
+  energy      number of        number       cum number      weight of       weight       cum weight
+ interval      photons        frequency    distribution      photons       frequency    distribution
+ 
+   20.000             0      0.00000E+00    0.00000E+00    0.00000E+00    0.00000E+00    0.00000E+00
+   15.000             1      6.18651E-06    6.18651E-06    5.00000E-06    6.14825E-06    6.14825E-06
+   10.000           282      1.74460E-03    1.75078E-03    1.47531E-03    1.81412E-03    1.82027E-03
+    9.000           169      1.04552E-03    2.79630E-03    9.07787E-04    1.11626E-03    2.93653E-03
+    8.000           239      1.47858E-03    4.27488E-03    1.26335E-03    1.55348E-03    4.49000E-03
+    7.000          1418      8.77247E-03    1.30474E-02    7.19963E-03    8.85302E-03    1.33430E-02
+    6.000          4441      2.74743E-02    4.05216E-02    2.24936E-02    2.76592E-02    4.10023E-02
+    5.000          1064      6.58245E-03    4.71041E-02    5.61115E-03    6.89975E-03    4.79020E-02
+    4.000         29688      1.83665E-01    2.30769E-01    1.48744E-01    1.82903E-01    2.30805E-01
+    3.000          4018      2.48574E-02    2.55627E-01    2.04165E-02    2.51052E-02    2.55910E-01
+    2.000         96913      5.99553E-01    8.55180E-01    4.85265E-01    5.96707E-01    8.52617E-01
+    1.000          5669      3.50713E-02    8.90251E-01    2.98777E-02    3.67391E-02    8.89356E-01
+    0.500          1797      1.11172E-02    9.01368E-01    9.57162E-03    1.17697E-02    9.01126E-01
+    0.100         14747      9.12325E-02    9.92601E-01    7.40478E-02    9.10529E-02    9.92179E-01
+    0.010          1046      6.47109E-03    9.99072E-01    5.56004E-03    6.83691E-03    9.99016E-01
+    0.000           150      9.27977E-04    1.00000E+00    8.00604E-04    9.84463E-04    1.00000E+00
+
+   total         161642      1.00000E+00                   8.13240E-01    1.00000E+00
+
+1tally        5        nps =      200000
+           tally type 5    particle flux at a point detector.                                  
+           particle(s): neutrons 
+           this tally is modified by standard dose function 1.
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 2.00000E+01
+                 5.27850E-05 0.0025
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 2.00000E+01
+ uncollided neutron flux
+                 5.14739E-05 0.0023
+ 
+ detector score diagnostics                  cumulative          tally         cumulative
+                                             fraction of         per           fraction of
+   times average score     transmissions     transmissions       history       total tally
+        1.00000E-01              89180         0.25536        9.91587E-04        0.00282
+        1.00000E+00             152817         0.69295        1.07423E-01        0.30793
+        2.00000E+00                399         0.69409        9.67392E-04        0.31068
+        5.00000E+00              50223         0.83790        2.36778E-01        0.98321
+        1.00000E+01                 82         0.83814        9.73000E-04        0.98597
+        1.00000E+02                116         0.83847        3.23852E-03        0.99517
+        1.00000E+03                  0         0.83847        0.00000E+00        0.99517
+        1.00000E+38                  0         0.83847        0.00000E+00        0.99517
+ before dd roulette              56410         1.00000        1.70107E-03        1.00000
+
+ average tally per history = 3.52073E-01            largest score = 9.66861E+00
+ (largest score)/(average tally) = 2.74619E+01      nps of largest score =        6015
+
+ score contributions by cell
+        cell      misses        hits    tally per history    weight per hit
+     1     1          71           0       0.00000E+00         0.00000E+00
+     2     2         918       99803       1.74227E-01         3.49141E-01
+     3     4    23350553      247362       1.77808E-01         1.43764E-01
+     5     5      211103         293       7.01248E-09         4.78667E-06
+     6     6      357803        1769       3.79811E-05         4.29408E-03
+       total    23920448      349227       3.52073E-01         2.01630E-01
+
+ score misses
+   russian roulette on pd                        0
+   psc=0.                                  7316406
+   russian roulette in transmission       16572090
+   underflow in transmission                 31952
+   hit a zero-importance cell                    0
+   energy cutoff                                 0
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 3.00000E+01
+                 1.17243E-07 0.0387
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 3.00000E+01
+ uncollided neutron flux
+                 4.18195E-08 0.0002
+ 
+ detector score diagnostics                  cumulative          tally         cumulative
+                                             fraction of         per           fraction of
+   times average score     transmissions     transmissions       history       total tally
+        1.00000E-01            5143702         0.94611        2.99402E-05        0.01711
+        1.00000E+00             232208         0.98882        3.70725E-04        0.22902
+        2.00000E+00               5185         0.98978        6.49710E-05        0.26615
+        5.00000E+00               3742         0.99047        1.01826E-04        0.32436
+        1.00000E+01               1303         0.99071        8.06159E-05        0.37043
+        1.00000E+02               1246         0.99093        2.94388E-04        0.53870
+        1.00000E+03                211         0.99097        5.11462E-04        0.83105
+        1.00000E+38                 13         0.99098        2.85349E-04        0.99415
+ before dd roulette              49061         1.00000        1.02312E-05        1.00000
+
+ average tally per history = 1.74951E-03            largest score = 1.03758E+01
+ (largest score)/(average tally) = 5.93071E+03      nps of largest score =       49182
+
+ score contributions by cell
+        cell      misses        hits    tally per history    weight per hit
+     1     1          71           0       0.00000E+00         0.00000E+00
+     2     2         500      100221       1.26822E-04         2.53084E-04
+     3     4    18287187     5310728       1.62206E-03         6.10862E-05
+     5     5      208406        2990       9.18530E-09         6.14402E-07
+     6     6      336840       22732       6.16316E-07         5.42245E-06
+       total    18833004     5436671       1.74951E-03         6.43595E-05
+
+ score misses
+   russian roulette on pd                        0
+   psc=0.                                  7275756
+   russian roulette in transmission       10729984
+   underflow in transmission                827264
+   hit a zero-importance cell                    0
+   energy cutoff                                 0
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 4.00000E+01
+                 1.88565E-08 0.0683
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 4.00000E+01
+ uncollided neutron flux
+                 3.57246E-09 0.0001
+ 
+ detector score diagnostics                  cumulative          tally         cumulative
+                                             fraction of         per           fraction of
+   times average score     transmissions     transmissions       history       total tally
+        1.00000E-01            6816216         0.98877        2.87377E-05        0.08830
+        1.00000E+00              26502         0.99262        1.76533E-05        0.14254
+        2.00000E+00               3616         0.99314        9.90108E-06        0.17296
+        5.00000E+00               2513         0.99351        1.52764E-05        0.21990
+        1.00000E+01                937         0.99364        1.28001E-05        0.25923
+        1.00000E+02               1098         0.99380        6.14650E-05        0.44809
+        1.00000E+03                149         0.99383        8.80320E-05        0.71858
+        1.00000E+38                 22         0.99383        8.76999E-05        0.98805
+ before dd roulette              42544         1.00000        3.89021E-06        1.00000
+
+ average tally per history = 3.25456E-04            largest score = 2.62833E+00
+ (largest score)/(average tally) = 8.07585E+03      nps of largest score =        9834
+
+ score contributions by cell
+        cell      misses        hits    tally per history    weight per hit
+     1     1          71           0       0.00000E+00         0.00000E+00
+     2     2         278      100443       1.12312E-05         2.23633E-05
+     3     4    16865201     6732714       3.14070E-04         9.32968E-06
+     5     5      203707        7689       7.63502E-08         1.98596E-06
+     6     6      306821       52751       7.78377E-08         2.95114E-07
+       total    17376078     6893597       3.25456E-04         9.44226E-06
+
+ score misses
+   russian roulette on pd                        0
+   psc=0.                                  7208338
+   russian roulette in transmission        6889481
+   underflow in transmission               3278259
+   hit a zero-importance cell                    0
+   energy cutoff                                 0
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 5.00000E+01
+                 7.39282E-09 0.3618
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 5.00000E+01
+ uncollided neutron flux
+                 5.43191E-10 0.0001
+ 
+ detector score diagnostics                  cumulative          tally         cumulative
+                                             fraction of         per           fraction of
+   times average score     transmissions     transmissions       history       total tally
+        1.00000E-01            5648073         0.98381        3.74871E-06        0.05581
+        1.00000E+00              51731         0.99283        2.90176E-06        0.09901
+        2.00000E+00               3799         0.99349        1.40922E-06        0.11999
+        5.00000E+00               2797         0.99397        2.24401E-06        0.15339
+        1.00000E+01               1046         0.99416        1.84694E-06        0.18089
+        1.00000E+02               1163         0.99436        8.25638E-06        0.30380
+        1.00000E+03                149         0.99438        9.89235E-06        0.45107
+        1.00000E+38                 19         0.99439        3.68158E-05        0.99916
+ before dd roulette              32217         1.00000        5.66216E-08        1.00000
+
+ average tally per history = 6.71717E-05            largest score = 3.17102E+00
+ (largest score)/(average tally) = 4.72077E+04      nps of largest score =      108681
+
+ score contributions by cell
+        cell      misses        hits    tally per history    weight per hit
+     1     1          49          22       2.48031E-12         2.25482E-08
+     2     2         322      100399       1.72789E-06         3.44205E-06
+     3     4    18102107     5495808       5.67852E-05         2.06649E-06
+     5     5      168581       42815       8.64601E-06         4.03877E-05
+     6     6      257622      101950       1.26129E-08         2.47434E-08
+       total    18528681     5740994       6.71717E-05         2.34007E-06
+
+ score misses
+   russian roulette on pd                        0
+   psc=0.                                  7153997
+   russian roulette in transmission        3339042
+   underflow in transmission               8035642
+   hit a zero-importance cell                    0
+   energy cutoff                                 0
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 6.00000E+01
+                 1.00934E-09 0.1705
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 6.00000E+01
+ uncollided neutron flux
+                 8.21560E-11 0.0002
+ 
+ detector score diagnostics                  cumulative          tally         cumulative
+                                             fraction of         per           fraction of
+   times average score     transmissions     transmissions       history       total tally
+        1.00000E-01             309098         0.84550        5.82694E-07        0.02954
+        1.00000E+00              42273         0.96113        4.24525E-07        0.05106
+        2.00000E+00               3261         0.97005        2.07827E-07        0.06159
+        5.00000E+00               2382         0.97657        3.22216E-07        0.07793
+        1.00000E+01               1010         0.97933        3.01644E-07        0.09322
+        1.00000E+02               1094         0.98232        1.31173E-06        0.15971
+        1.00000E+03                148         0.98273        1.72577E-06        0.24720
+        1.00000E+38                 24         0.98279        1.48426E-05        0.99960
+ before dd roulette               6291         1.00000        7.85387E-09        1.00000
+
+ average tally per history = 1.97268E-05            largest score = 1.48164E+00
+ (largest score)/(average tally) = 7.51078E+04      nps of largest score =      169727
+
+ score contributions by cell
+        cell      misses        hits    tally per history    weight per hit
+     1     1          24          47       1.02416E-11         4.35813E-08
+     2     2        1866       98855       2.62864E-07         5.31818E-07
+     3     4    23375844      222071       1.92189E-06         1.73088E-06
+     5     5      169430       41966       1.75403E-05         8.35927E-05
+     6     6      356930        2642       1.79801E-09         1.36110E-07
+       total    23904094      365581       1.97268E-05         1.07920E-05
+
+ score misses
+   russian roulette on pd                        0
+   psc=0.                                  7114928
+   russian roulette in transmission        9140818
+   underflow in transmission               7648348
+   hit a zero-importance cell                    0
+   energy cutoff                                 0
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 7.00000E+01
+                 2.48103E-10 0.3030
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 7.00000E+01
+ uncollided neutron flux
+                 1.41429E-11 0.0001
+ 
+ detector score diagnostics                  cumulative          tally         cumulative
+                                             fraction of         per           fraction of
+   times average score     transmissions     transmissions       history       total tally
+        1.00000E-01             353673         0.82337        8.59812E-08        0.04749
+        1.00000E+00              61435         0.96640        6.21775E-08        0.08184
+        2.00000E+00               4186         0.97614        3.03630E-08        0.09861
+        5.00000E+00               3079         0.98331        4.81907E-08        0.12523
+        1.00000E+01               1233         0.98618        4.37301E-08        0.14938
+        1.00000E+02               1396         0.98943        1.94862E-07        0.25702
+        1.00000E+03                223         0.98995        3.02680E-07        0.42421
+        1.00000E+38                 30         0.99002        1.03538E-06        0.99612
+ before dd roulette               4286         1.00000        7.02997E-09        1.00000
+
+ average tally per history = 1.81040E-06            largest score = 9.63527E-02
+ (largest score)/(average tally) = 5.32218E+04      nps of largest score =      195356
+
+ score contributions by cell
+        cell      misses        hits    tally per history    weight per hit
+     1     1          13          58       1.16151E-09         4.00522E-06
+     2     2         833       99888       4.54088E-08         9.09195E-08
+     3     4    23322504      275411       2.72529E-07         1.97907E-07
+     5     5      169146       42250       1.49102E-06         7.05808E-06
+     6     6      347638       11934       2.78811E-10         4.67256E-09
+       total    23840134      429541       1.81040E-06         8.42945E-07
+
+ score misses
+   russian roulette on pd                        0
+   psc=0.                                  7088518
+   russian roulette in transmission        9062744
+   underflow in transmission               7688872
+   hit a zero-importance cell                    0
+   energy cutoff                                 0
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 8.00000E+01
+                 1.58211E-10 0.0543
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 8.00000E+01
+ uncollided neutron flux
+                 9.83582E-12 0.0020
+ 
+ detector score diagnostics                  cumulative          tally         cumulative
+                                             fraction of         per           fraction of
+   times average score     transmissions     transmissions       history       total tally
+        1.00000E-01             129691         0.77510        7.59007E-08        0.05898
+        1.00000E+00              23462         0.91532        4.87746E-08        0.09688
+        2.00000E+00               3600         0.93683        2.96259E-08        0.11990
+        5.00000E+00               2801         0.95357        5.10674E-08        0.15959
+        1.00000E+01               1231         0.96093        5.08063E-08        0.19907
+        1.00000E+02               1616         0.97059        2.78882E-07        0.41578
+        1.00000E+03                333         0.97258        5.59279E-07        0.85037
+        1.00000E+38                 21         0.97271        1.80450E-07        0.99060
+ before dd roulette               4567         1.00000        1.21026E-08        1.00000
+
+ average tally per history = 1.28689E-06            largest score = 3.64661E-03
+ (largest score)/(average tally) = 2.83366E+03      nps of largest score =      144055
+
+ score contributions by cell
+        cell      misses        hits    tally per history    weight per hit
+     1     1          19          52       1.26774E-09         4.87592E-06
+     2     2       46433       54288       3.15983E-08         1.16410E-07
+     3     4    23494650      103265       1.93304E-07         3.74385E-07
+     5     5      202505        8891       1.06050E-06         2.38556E-05
+     6     6      358746         826       2.19620E-10         5.31768E-08
+       total    24102353      167322       1.28689E-06         1.53822E-06
+
+ score misses
+   russian roulette on pd                        0
+   psc=0.                                  7070090
+   russian roulette in transmission        9709239
+   underflow in transmission               7323024
+   hit a zero-importance cell                    0
+   energy cutoff                                 0
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 9.00000E+01
+                 1.16590E-10 0.0414
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 9.00000E+01
+ uncollided neutron flux
+                 7.20680E-12 0.0021
+ 
+ detector score diagnostics                  cumulative          tally         cumulative
+                                             fraction of         per           fraction of
+   times average score     transmissions     transmissions       history       total tally
+        1.00000E-01             127179         0.75796        5.61502E-08        0.05998
+        1.00000E+00              25133         0.90775        3.95308E-08        0.10221
+        2.00000E+00               3849         0.93069        2.40308E-08        0.12788
+        5.00000E+00               3123         0.94930        4.35717E-08        0.17443
+        1.00000E+01               1454         0.95797        4.53570E-08        0.22288
+        1.00000E+02               1964         0.96967        2.49286E-07        0.48918
+        1.00000E+03                403         0.97207        4.61524E-07        0.98221
+        1.00000E+38                  2         0.97208        9.05527E-09        0.99188
+ before dd roulette               4684         1.00000        7.59879E-09        1.00000
+
+ average tally per history = 9.36105E-07            largest score = 9.18535E-04
+ (largest score)/(average tally) = 9.81230E+02      nps of largest score =      144055
+
+ score contributions by cell
+        cell      misses        hits    tally per history    weight per hit
+     1     1          11          60       1.37703E-09         4.59009E-06
+     2     2       47995       52726       2.31515E-08         8.78181E-08
+     3     4    23494375      103540       1.44229E-07         2.78596E-07
+     5     5      200773       10623       7.67167E-07         1.44435E-05
+     6     6      358730         842       1.80735E-10         4.29299E-08
+       total    24101884      167791       9.36105E-07         1.11580E-06
+
+ score misses
+   russian roulette on pd                        0
+   psc=0.                                  7056501
+   russian roulette in transmission        9891629
+   underflow in transmission               7153754
+   hit a zero-importance cell                    0
+   energy cutoff                                 0
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 1.00000E+02
+                 8.70622E-11 0.0356
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 1.00000E+02
+ uncollided neutron flux
+                 5.51153E-12 0.0020
+ 
+ detector score diagnostics                  cumulative          tally         cumulative
+                                             fraction of         per           fraction of
+   times average score     transmissions     transmissions       history       total tally
+        1.00000E-01             130463         0.75151        4.31069E-08        0.06229
+        1.00000E+00              26520         0.90427        3.13536E-08        0.10759
+        2.00000E+00               4237         0.92868        1.98487E-08        0.13627
+        5.00000E+00               3341         0.94792        3.50672E-08        0.18694
+        1.00000E+01               1599         0.95713        3.71671E-08        0.24065
+        1.00000E+02               2246         0.97007        2.15828E-07        0.55251
+        1.00000E+03                407         0.97241        3.04435E-07        0.99240
+        1.00000E+38                  0         0.97241        0.00000E+00        0.99240
+ before dd roulette               4789         1.00000        5.25880E-09        1.00000
+
+ average tally per history = 6.92066E-07            largest score = 4.72895E-04
+ (largest score)/(average tally) = 6.83309E+02      nps of largest score =      115160
+
+ score contributions by cell
+        cell      misses        hits    tally per history    weight per hit
+     1     1           9          62       1.40033E-09         4.51719E-06
+     2     2       46545       54176       1.78155E-08         6.57690E-08
+     3     4    23491335      106580       1.11197E-07         2.08663E-07
+     5     5      199578       11818       5.61416E-07         9.50103E-06
+     6     6      358606         966       2.37390E-10         4.91490E-08
+       total    24096073      173602       6.92066E-07         7.97301E-07
+
+ score misses
+   russian roulette on pd                        0
+   psc=0.                                  7045625
+   russian roulette in transmission        9997918
+   underflow in transmission               7052530
+   hit a zero-importance cell                    0
+   energy cutoff                                 0
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 1.10000E+02
+                 6.69978E-11 0.0322
+ 
+ detector located at x,y,z = 0.00000E+00 0.00000E+00 1.10000E+02
+ uncollided neutron flux
+                 4.35018E-12 0.0019
+ 
+ detector score diagnostics                  cumulative          tally         cumulative
+                                             fraction of         per           fraction of
+   times average score     transmissions     transmissions       history       total tally
+        1.00000E-01             134838         0.74908        3.40576E-08        0.06459
+        1.00000E+00              27639         0.90263        2.51236E-08        0.11224
+        2.00000E+00               4553         0.92792        1.62902E-08        0.14314
+        5.00000E+00               3586         0.94785        2.87908E-08        0.19775
+        1.00000E+01               1751         0.95757        3.13846E-08        0.25727
+        1.00000E+02               2401         0.97091        1.80195E-07        0.59903
+        1.00000E+03                393         0.97310        2.07546E-07        0.99267
+        1.00000E+38                  0         0.97310        0.00000E+00        0.99267
+ before dd roulette               4843         1.00000        3.86700E-09        1.00000
+
+ average tally per history = 5.27255E-07            largest score = 3.07280E-04
+ (largest score)/(average tally) = 5.82791E+02      nps of largest score =      100174
+
+ score contributions by cell
+        cell      misses        hits    tally per history    weight per hit
+     1     1           9          62       1.27353E-09         4.10816E-06
+     2     2       44936       55785       1.40241E-08         5.02792E-08
+     3     4    23487276      110639       8.84141E-08         1.59824E-07
+     5     5      198904       12492       4.23208E-07         6.77566E-06
+     6     6      358546        1026       3.35447E-10         6.53893E-08
+       total    24089671      180004       5.27255E-07         5.85826E-07
+
+ score misses
+   russian roulette on pd                        0
+   psc=0.                                  7037403
+   russian roulette in transmission       10065028
+   underflow in transmission               6987240
+   hit a zero-importance cell                    0
+   energy cutoff                                 0
+
+
+ ===================================================================================================================================
+
+           results of 10 statistical checks for the estimated answer for the tally fluctuation chart (tfc) bin of tally        5
+
+ tfc bin     --mean--      ---------relative error---------      ----variance of the variance----      --figure of merit--     -pdf-
+ behavior    behavior      value   decrease   decrease rate      value   decrease   decrease rate       value     behavior     slope
+
+ desired      random       <0.05      yes      1/sqrt(nps)       <0.10      yes        1/nps           constant    random      >3.00
+ observed     random        0.00      yes          yes            0.00      yes         yes            constant   increase     10.00
+ passed?        yes          yes      yes          yes             yes      yes         yes               yes         no         yes
+
+ ===================================================================================================================================
+
+
+ warning.  the tally in the tally fluctuation chart bin did not pass  1 of the 10 statistical checks.
+
+1analysis of the results in the tally fluctuation chart bin (tfc) for tally        5 with nps =      200000  print table 160
+
+
+ normed average tally per history  = 5.27850E-05          unnormed average tally per history  = 5.27850E-05
+ estimated tally relative error    = 0.0025               estimated variance of the variance  = 0.0003
+ relative error from zero tallies  = 0.0000               relative error from nonzero scores  = 0.0025
+
+ number of nonzero history tallies =      200000          efficiency for the nonzero tallies  = 1.0000
+ history number of largest  tally  =       43316          largest  unnormalized history tally = 2.46872E-03
+ (largest  tally)/(average tally)  = 4.67693E+01          (largest  tally)/(avg nonzero tally)= 4.67693E+01
+
+ (confidence interval shift)/mean  = 0.0000               shifted confidence interval center  = 5.27855E-05
+
+
+ if the largest  history score sampled so far were to occur on the next history, the tfc bin quantities would change as follows:
+
+      estimated quantities           value at nps           value at nps+1           value(nps+1)/value(nps)-1.
+
+      mean                            5.27850E-05             5.27971E-05                     0.000229
+      relative error                  2.45003E-03             2.46011E-03                     0.004118
+      variance of the variance        2.54239E-04             3.24567E-04                     0.276623
+      shifted center                  5.27855E-05             5.27855E-05                     0.000001
+      figure of merit                 2.83526E+04             2.81205E+04                    -0.008185
+
+ the estimated slope of the 200 largest  tallies starting at  3.01528E-04 appears to be decreasing at least exponentially.
+ the large score tail of the empirical history score probability density function appears to have no unsampled regions.
+
+ fom = (histories/minute)*(f(x) signal-to-noise ratio)**2 = (3.404E+04)*( 9.127E-01)**2 = (3.404E+04)*(8.330E-01) = 2.835E+04
+
+1unnormed tally density for tally        5          nonzero tally mean(m) = 5.278E-05   nps =      200000  print table 161
+
+ abscissa              ordinate   log plot of tally probability density function in tally fluctuation chart bin(d=decade,slope=10.0)
+  tally  number num den log den:d-------------d-------------d--------------d--------------d-------------d--------------d------------
+ 1.26-05  17702 3.42+04   4.534 **************|*************|**************|**************|*************|**************|*********   
+ 1.58-05  35560 5.45+04   4.737 **************|*************|**************|**************|*************|**************|************
+ 2.00-05  29258 3.56+04   4.552 **************|*************|**************|**************|*************|**************|*********   
+ 2.51-05  23625 2.29+04   4.359 **************|*************|**************|**************|*************|**************|******      
+ 3.16-05  18891 1.45+04   4.162 **************|*************|**************|**************|*************|**************|****        
+ 3.98-05  15092 9.22+03   3.965 **************|*************|**************|**************|*************|**************|*           
+ 5.01-05   8847 4.29+03   3.633 **************|*************|**************|**************|*************|***********   |            
+ 6.31-05    259 9.98+01   1.999 mmmmmmmmmmmmmm|mmmmmmmmmmmmm|mmmmmmmmmmmmmm|mmmmmmmmmmmmmm|m            |              |            
+ 7.94-05    174 5.33+01   1.726 **************|*************|**************|************  |             |              |            
+ 1.00-04    119 2.89+01   1.461 **************|*************|**************|********      |             |              |            
+ 1.26-04     87 1.68+01   1.225 **************|*************|**************|*****         |             |              |            
+ 1.58-04  49477 7.59+03   3.880 **************|*************|**************|**************|*************|**************|            
+ 2.00-04    478 5.82+01   1.765 **************|*************|**************|************  |             |              |            
+ 2.51-04    145 1.40+01   1.147 **************|*************|**************|***           |             |              |            
+ 3.16-04    100 7.69+00   0.886 **************|*************|**************|              |             |              |            
+ 3.98-04     34 2.08+00   0.317 **************|*************|******        |              |             |              |            
+ 5.01-04     25 1.21+00   0.084 **************|*************|***           |              |             |              |            
+ 6.31-04     24 9.25-01  -0.034 **************|*************|*             |              |             |              |            
+ 7.94-04     32 9.79-01  -0.009 **************|*************|*             |              |             |              |            
+ 1.00-03     36 8.75-01  -0.058 **************|*************|*             |              |             |              |            
+ 1.26-03     30 5.79-01  -0.237 **************|************ |              |              |             |              |            
+ 1.58-03      3 4.60-02  -1.337 ***********   |             |              |              |             |              |            
+ 2.00-03      1 1.22-02  -1.914 **            |             |              |              |             |              |            
+ 2.51-03      1 9.68-03  -2.014 *             |             |              |              |             |              |            
+  total  200000 1.00+00         d-------------d-------------d--------------d--------------d-------------d--------------d------------
+
+1status of the statistical checks used to form confidence intervals for the mean for each tally bin
+
+
+ tally   result of statistical checks for the tfc bin (the first check not passed is listed) and error magnitude check for all bins
+
+        5   missed  1 of 10 tfc bin checks: the figure of merit has a trend during the last half of the problem                       
+         missed all bin error check:    20 tally bins had     0 bins with zeros and     5 bins with relative errors exceeding 0.05
+
+
+ the 10 statistical checks are only for the tally fluctuation chart bin and do not apply to other tally bins.
+
+ warning.       1 of the     1 tally fluctuation chart bins did not pass all 10 statistical checks.
+ warning.       1 of the     1 tallies had bins with relative errors greater than recommended.
+1tally fluctuation charts                              
+
+                            tally        5
+          nps      mean     error   vov  slope    fom
+        16000   5.2634E-05 0.0089 0.0037  1.6   26832
+        32000   5.2874E-05 0.0061 0.0013  1.9   28211
+        48000   5.2892E-05 0.0051 0.0020  2.1   27132
+        64000   5.2847E-05 0.0044 0.0013  2.0   27491
+        80000   5.2872E-05 0.0039 0.0009  2.4   27511
+        96000   5.2824E-05 0.0036 0.0007  3.0   27571
+       112000   5.2806E-05 0.0033 0.0006  4.9   27822
+       128000   5.2786E-05 0.0031 0.0005  8.8   27836
+       144000   5.2761E-05 0.0029 0.0004 10.0   27857
+       160000   5.2749E-05 0.0028 0.0004 10.0   27987
+       176000   5.2719E-05 0.0026 0.0003 10.0   28066
+       192000   5.2758E-05 0.0025 0.0003 10.0   28313
+       200000   5.2785E-05 0.0025 0.0003 10.0   28353
+
+ ***********************************************************************************************************************
+
+ dump no.    2 on file runtpe     nps =      200000     coll =       25936565     ctm =        5.88   nrn =        
+ 575814365
+
+         8 warning messages so far.
+
+
+ run terminated when      200000  particle histories were done.
+
+ computer time =    5.92 minutes
+
+ mcnp     version 6     05/08/13                     01/18/19 11:08:10                     probid =  01/18/19 11:02:11 

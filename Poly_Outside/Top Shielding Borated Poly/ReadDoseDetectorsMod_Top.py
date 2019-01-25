@@ -71,7 +71,7 @@ z_loc_plot = []
 figure = plt.figure()
 ax = figure.add_subplot(111)
 line, = ax.plot([], [], '*')
-ax.set_title('Poly Outside 50cm of Concrete')
+#ax.set_title('Poly Outside 50cm of Concrete')
 ax.set_ylabel('Dose Rate(mrem/hr)')
 ax.set_xlabel('Distance(cm)')
 
@@ -103,15 +103,15 @@ for i in range(1,len(sys.argv)):
 
     # KG [
     #interpolate dose at 30 cm from shielding
-    #f = interpolate.interp1d(z_location, dose) #linear interpolation
-    #ax.plot(point_of_interest,f(point_of_interest), 'ro')
+    f = interpolate.interp1d(z_location, dose) #linear interpolation
+    ax.plot(point_of_interest,f(point_of_interest), 'ro')
     # ]
 
 #print dose
 ax.legend()
-ax.set_ylim(min(dose_plot[-1]), max(dose_plot[0]))
+ax.set_ylim(0.1, 10)
 print z_loc_plot[0]
-ax.set_xlim(min(z_loc_plot[0]), max(z_loc_plot[0]))
+ax.set_xlim(80, max(z_loc_plot[0]))
 ax.semilogy()
 #line.set_xdata(x_loc_plot)
 #line.set_ydata(dose_plot)
