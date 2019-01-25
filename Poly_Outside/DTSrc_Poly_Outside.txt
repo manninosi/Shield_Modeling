@@ -21,9 +21,9 @@ c                2/12/2018 - Dose card was put in a few days ago, doing geometry
 c                6/21/2018 - Made concrete and poly boxes one macro body instead of sections3
 c Cell Cards  
 c mat#   density    srfce rlatns   importance
-1   1  -0.001205      -1 2 3 4 13    imp:p=1 imp:n=1 $air
+1   1  -0.001205      -1 2 3 4 13 70 imp:p=1 imp:n=1 $air
 2   1  -0.001205      -2  13         imp:p=1 imp:n=1 $air
-c 3   5  -3.67          -70          imp:p=1 imp:n=1 $NaI
+3   5  -3.67          -70            imp:p=1 imp:n=1 $NaI
 4   3  -2.300000      -3  2          imp:p=1 imp:n=1 $Concrete blocks
 5   2  -1.19          -4  3          imp:p=1 imp:n=1 $borated poly
 6   3  -2.300000      -13            imp:p=1 imp:n=1 $concrete floor
@@ -35,7 +35,7 @@ c Surface cards
 3 RPP -80 80 -80 80 4.0 80 $concrete
 4 RPP -87.5 87.5 -87.5 87.5 4.0 87.5 $borated poly blocks
 13 RPP -305 305 -305 305 0.02 4.0 $concrete floor
-c 70 RCC 130 0 20 10 0 0 5 
+70 RCC 130 0 20 10 0 0 5 
 
 c Materials Cards
 c Air
@@ -79,20 +79,21 @@ PHYS:P 10
 SDEF PAR=N RAD=d1 ERG=14.1 POS=0 0 20   $(14.1 MeV DT, 2.4 MeV DD)
 SI1 0 1
 SP1 -21 1
-F5:N 110 0 20 0.5 &  $Flux at a point x,y,z,r
-125 0 20 0.5 &
-150 0 20 0.5 &
-175 0 20 0.5 &
-200 0 20 0.5 &
-250 0 20 0.5 &
-300 0 20 0.5 &
-350 0 20 0.5 &
-400 0 20 0.5 &
-450 0 20 0.5 
+cF5F5:N 110 0 20 0.5 &  $Flux at a point x,y,z,r
+c125 0 20 0.5 &
+c150 0 20 0.5 &
+c175 0 20 0.5 &
+c200 0 20 0.5 &
+c250 0 20 0.5 &
+c300 0 20 0.5 &
+c350 0 20 0.5 &
+c400 0 20 0.5 &
+c450 0 20 0.5 
 c Energy Bin Tally for checking for gammas on b-10 neutron reaction
-c *F8:P 3
-c E8: 0 1E-5 100i 4
+*F8:P 3
+ft18 geb 0.080 0
+E8: 0 1E-5 100i 4
 c FM5 1e6
 DF5 ic=10 iu=1 LOG $dose card
 c E5 2.5e-8 4e-7 15 $(MeV energy binning)
-NPS 1e8     $resolution (1e6 for DD, 1e8 for DT)
+NPS 1e6     $resolution (1e6 for DD, 1e8 for DT)
