@@ -1,0 +1,106 @@
+Isotropic 14MeV neutron point source with poly, B poly, and concrete
+c
+c *********File Description************
+c
+c Description: Neutrons from a point source will trave through three materials; 
+c              poly, borated poly, and concreteye ye
+c
+c Author: Scott Zimny
+c         Mitch Mannino
+c
+c Modifcations: 11/10/2017 - Started with the point cource and three materials.
+c               11/13/2017 - Nik E gave some pointers on F5, RPP, Mode N, 2 void cells
+c                            and NOTRN.
+c               11/27/2017 - Met with both Dr. Palmers to gain more insight on macro
+c                            bodies, NOTRN, outside void, and particle mode. Added things.
+c                1/26/2018 - Met with Mitch and Dr. Reese to discuss further steps.
+c                1/28/2018 - Working on F2, e0, DM, etc.
+c                1/29/2018 - Added surface tallies to macrobodies, added PHYS (which slightly changed results). 
+c                1/30/2018 - Added poly and lead cell, surface, and mat cards 
+c                2/12/2018 - Dose card was put in a few days ago, doing geometry today.
+c                6/21/2018 - Made concrete and poly boxes one macro body instead of sections3
+c Cell Cards  
+c mat#   density    srfce rlatns   importance
+1   1  -0.001205      -1 13              imp:p=1 imp:n=1 $air
+c 2   1  -0.001205      -2  13         imp:p=1 imp:n=1 $air
+c 3   5  -3.67          -70            imp:p=1 imp:n=1 $NaI
+c 4   3  -2.300000      -3  2          imp:p=1 imp:n=1 $Concrete blocks
+c 30 10  -0.93          -30 3          imp:p=1 imp:n=1 $non-boral poly slice
+c 40  3  -2.300000      -40 30         imp:p=1 imp:n=1 $2nd layer of concrete
+c 5   2  -1.19          -4  40         imp:p=1 imp:n=1 $borated poly
+6   3  -2.300000      -13            imp:p=1 imp:n=1 $concrete floor
+7   0                  1             imp:p=0 imp:n=0 $outside void
+
+c Surface cards
+1  RPP -600 600 -305 305 0.01 305 $~20'x20'x10' room full of air
+2  RPP -20 20 -20 20 4.0 20 $~5'x5'x3' central box of air containing source
+3  RPP -50 50 -50 50 4.0 50 $1st layer of concrete 30 cm
+30 RPP -60 60 -60 60 4.0 60 $10 cm of poly
+40 RPP -90 90 -90 90 4.0 90 $2nd layer of concrete 30 cm
+4  RPP -95 95 -95 95 4.0 95 $borated poly blocks
+13 RPP -305 305 -305 305 0.02 4.0 $concrete floor
+c 70 RCC 130 0 20 10 0 0 5 
+
+c Materials Cards
+c Air
+m1   6000.71c 0.000150 $carbon          double checked
+     7014 0.784431 $nitrogen
+     8016.71c 0.210748 $oxygen
+     18000 0.004671  $argon
+c NaI
+m5   81205 0.001 $NaI(Tl)                                                         
+     11023 0.499 53127 0.5
+c Borated Polyethylene, 5 wt% B4C              
+m2   1001.71c 0.645175 $hydrogen in poly          
+     5010.71c 0.005055 $boron-10
+     5011.71c 0.020735 $boron-11
+     6000.71c 0.329035 $carbon in both poly and B4C
+c Borated Polyethylene, 10 wt% B4C              
+c m2  1001.71c 0.627759 $hydrogen in poly          
+c      5010.71c 0.009338 $boron-10
+c      5011.71c 0.037352 $boron-11
+c      6000.71c 0.325552 $carbon in both poly and B4C
+c Borated Polyethylene, 30 wt% B4C              
+c m2   1001.71c 0.533908 $hydrogen in poly          
+c       5010.71c 0.034149 $boron-10
+c       5011.71c 0.140082 $boron-11
+c       6000.71c 0.310512 $carbon in both poly and B4C
+c Polyethylene Non-borated
+m10  1001.71c 0.666662 $hydrogen in poly 
+     6000.71c 0.333338 $carbon in poly
+c Concrete (Portland Cement)   double checked
+m3   1001.71c  0.168759 $hydrogen 
+     6000.71c  0.001416 $carbon    
+     8016.71c  0.562524 $oxygen
+     11023 0.011838 $sodium
+     12000 0.001400 $magnesium
+     13027 0.021354 $aluminum
+     14000 0.204115 $silicon
+     19000 0.005656 $potassium
+     20000 0.018674 $calcium
+     26000 0.004264 $iron
+c The source information
+MODE N P  $particle mode and add P later for photons
+PHYS:N 100 0 $set an upper limit on neutron energy of 15 MeV and a capture limit of 0 MeV
+PHYS:P 15
+SDEF PAR=N RAD=d1 ERG=14.1 POS=0 0 20   $(14.1 MeV DT, 2.4 MeV DD)
+SI1 0 1
+SP1 -21 1
+F5:P 100 0 20 0.5 &  $Flux at a point x,y,z,r
+125 0 20 0.5 &
+150 0 20 0.5 &
+175 0 20 0.5 &
+200 0 20 0.5 &
+250 0 20 0.5 &
+300 0 20 0.5 &
+350 0 20 0.5 &
+400 0 20 0.5 &
+450 0 20 0.5 
+c Energy Bin Tally for checking for gammas on b-10 neutron reaction
+c *F8:P 3
+c ft8 geb 0.080 0
+c E8: 0 1E-5 100i 1
+c FM5 1e6
+DF5 ic=10 iu=1 LOG $dose card
+c E5 2.5e-8 4e-7 15 $(MeV energy binning)
+NPS 1e6     $resolution (1e6 for DD, 1e8 for DT)
